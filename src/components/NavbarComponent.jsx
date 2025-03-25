@@ -1,44 +1,27 @@
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "../styles/NavbarComponent.css";
 
 const NavbarComponent = () => {
+  const navigate = useNavigate(); // Hook para la navegación
+
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary ">
-      <div className="container-fluid">
-        <NavLink to="./" className="navbar-brand" href="#">
-          QueTeDebo?
-        </NavLink>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <NavLink to="/" className="nav-link" aria-current="page" href="#">
-                Calculadora
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/history" className="nav-link" href="#">
-                Historial
-              </NavLink>
-            </li>
+    <nav className="nav-bar-container">
+      <div className="nav-bar">
+        <div className="logo">
+          <h1 onClick={()=> navigate('/')} className="logo-txt">
+            ¿Que te <br />
+            debo?
+          </h1>
+        </div>
+        <div className="menu">
+          <ul>
+            <li onClick={() => navigate("/")}>Inicio</li>
+            <li onClick={() => navigate("/history")}>Historial</li>
           </ul>
         </div>
       </div>
     </nav>
   );
-}
+};
 
-export default NavbarComponent
-
-
-
-
+export default NavbarComponent;

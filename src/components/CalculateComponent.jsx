@@ -67,75 +67,69 @@ const CalculateComponent = () => {
     setAmigos(updatedAmigos);
   };
   return (
-    <>
-      <div>
-        <h1>Paguen sus deudas o mueran</h1>
-        <form>
-          <div className="friend">
-            <input
-              type="text"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              required
-              placeholder="Nombre"
-              onKeyDown={(e) => {
-                if (!/^[A-Za-z ]/.test(e.key) && e.key !== "Backspace") {
-                  e.preventDefault();
-                }
-              }}
-            />
-            <input
-              type="number"
-              value={gasto}
-              onChange={(e) => setGasto(e.target.value)}
-              placeholder="Gasto"
-            />
-          </div>
-          <div className="d-grid gap-1 buttonPanel">
-            <button
-              onClick={addFriend}
-              className="btn btn-primary"
-              type="button"
-            >
-              Agregar Persona
+    <div className="calculator-container">
+      <h2>Paguen sus deudas o sufran las consecuencias</h2>
+      <form className="calculator-form">
+        <div className="input-div">
+          <input
+            type="text"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            required
+            placeholder="Nombre"
+            onKeyDown={(e) => {
+              if (!/^[A-Za-z ]/.test(e.key) && e.key !== "Backspace") {
+                e.preventDefault();
+              }
+            }}
+          />
+          <input
+            type="number"
+            value={gasto}
+            onChange={(e) => setGasto(e.target.value)}
+            placeholder="Gasto"
+          />
+        </div>
+        <div className="button-container">
+          <div className="top-buttons">
+            <button className="add-button" onClick={addFriend} type="button">
+              Agregar
             </button>
-
-            <button
-              onClick={() => handleCalcular()}
-              className="btn btn-success"
-              type="button"
-            >
-              Calcular
-            </button>
-            <button
-              onClick={resetButton}
-              className="btn btn-danger"
-              type="button"
-            >
-              Resetear
+            <button className="delete-button" onClick={resetButton} type="button">
+              Borrar
             </button>
           </div>
-          <ul className="calculatedList">
+          <button
+            onClick={() => handleCalcular()}
+            type="button"
+            className="full-width calculate-button"
+          >
+            Calcular
+          </button>
+        </div>
+        <div className="results-container">
+          <ul className="list-friends">
             {amigos.map((amigo, index) => (
-              <li key={index} className="friend-list">
+              <li key={index}>
                 {amigo.name} puso: ${amigo.expense}
                 <DeleteForeverRoundedIcon
                   onClick={() => deleteFriend(index)}
-                  className="delete-icon"
                   sx={{ color: red[500] }}
                 />
               </li>
             ))}
           </ul>
-          <p><b>Total:${totalGasto}</b></p>
-          <ul className="calculatedList">
+          <p>
+            <b>Total: ${totalGasto}</b>
+          </p>
+          <ul>
             {transacciones.map((transaccion, index) => (
               <li key={index}>{transaccion}</li>
             ))}
           </ul>
-        </form>
-      </div>
-    </>
+        </div>
+      </form>
+    </div>
   );
 };
 

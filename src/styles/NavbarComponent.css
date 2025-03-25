@@ -1,0 +1,59 @@
+.nav-bar-container {
+    background-color: var(--theme-cherry);
+    color: var(--theme-champagne);
+    display: flex; /* Centrar con flexbox */
+    justify-content: center; /* Centra horizontalmente */
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    max-width: 800px;
+    width: 100%; 
+}
+.logo-txt{
+    font-family: "Pacifico";
+    text-align: center;
+    font-size: 24px;
+    cursor: pointer;
+    
+}
+
+.menu ul {
+    display: flex;  
+    gap: 20px;     
+    padding: 0;     
+    margin: 0;      
+    list-style: none; 
+}
+
+.menu ul li {
+    position: relative; /* Necesario para posicionar la barra debajo */
+    cursor: pointer;
+    padding-bottom: 5px; /* Espacio para la barra de carga */
+}
+
+.menu ul li::after {
+    content: "";
+    position: absolute;
+    bottom: 0; /* Posiciona la barra al final del li */
+    left: 0;
+    width: 100%;
+    height: 2px; /* Altura de la barra */
+    background-color: var(--theme-slate-gray); /* Color de la barra */
+    transform: scaleX(0); /* Comienza con la barra oculta */
+    transform-origin: bottom right; /* La barra se expandirá desde la derecha */
+    transition: transform 0.3s ease; /* Transición suave */
+}
+
+.menu ul li:hover::after {
+    transform: scaleX(1); /* Expande la barra al 100% al hacer hover */
+    transform-origin: bottom left; /* La barra se expande desde la izquierda */
+}
+
+.menu ul li.selected::after {
+    transform: scaleX(1); /* Mantiene la barra visible cuando está seleccionado */
+    transform-origin: bottom left;
+}

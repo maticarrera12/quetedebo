@@ -1,5 +1,6 @@
 .footer{
-    background-color: rgb(60, 60, 252);
+    background-color: var(--theme-cherry);
+    color: var(--theme-champagne);
     display: flex;
     margin-top: auto;
     align-items: flex-end;

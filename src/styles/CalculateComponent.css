@@ -1,64 +1,95 @@
-
-.friend {
-  display: flex;
-  margin-bottom: 10px;
-  flex-direction: row;
-  gap: 5px;
-}
-
-.friend input {
-  width: 90%;
-  border: solid 0.1px grey;
+.calculator-container{
+  margin: 0 auto;
+  margin-block: 30px;
+  background-color: var(--theme-champagne);
+  max-width: 400px;
   border-radius: 5px;
-  transition: border-color 0.1s, box-shadow 0.1s; 
-  padding-left: 8px;
+  padding: 15px;
+   text-align: center; 
+  align-items: center;
 }
 
-.friend input::placeholder {
-  color: rgb(198, 197, 197);
+
+.calculator-container h2{
+  font-weight: bold;
+  color: var(--theme-slate-gray);
+}
+.input-div {
+    display: flex;
+    flex-direction: column; /* Organiza los inputs en columna */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    max-width: 400px; /* Puedes ajustar este valor si quieres limitar el ancho */
+    gap: 8px; /* Espaciado entre los inputs */
+    margin-bottom: 8px;  
+  }
+
+.input-div input {
+    width: 100%; /* Hace que los inputs ocupen todo el ancho disponible */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Evita que el padding afecte el tamaño total */
+  background-color: var(--theme-timberwolf);
+  }
+
+  .button-container {
+    width: 100%; /* Hace que ocupe todo el ancho disponible */
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Espacio entre el bloque superior y el botón "Calcular" */
 }
 
-.friend input:hover {
-  border-color: #007bff; 
+.top-buttons {
+    display: flex;
+    gap: 5px; /* Espacio entre "Agregar" y "Borrar" */
+    width: 100%;
 }
 
-.friend input:focus {
-  border-color: #007bff; 
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
-  outline: none; 
+.top-buttons button {
+    flex: 1; /* Hace que ambos botones ocupen el mismo espacio */
 }
 
-.friend-list {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+.full-width {
+    width: 100%; /* Hace que el botón "Calcular" ocupe todo el ancho */
 }
 
-.delete-icon {
-  cursor: pointer;
-  margin-left: 0px; 
+button {
+    padding: 10px;
+    border: none;
+    color: var(--theme-champagne);
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
- .calculatedList{
-  margin:0 20px; 
-  padding-left: 10px;
+.add-button{
+  background-color: var(--theme-cherry);
+}
+.delete-button{
+  background-color: var(--theme-puce);
+}
+.calculate-button{
+  background-color: var(--theme-slate-gray);
+}
+
+.results-container{
+  margin: 0 auto;
+  margin-block: 10px;
+  background-color: var(--theme-timberwolf);
+  border-radius: 10px;
+  padding-block: 10px;
+  color: var(--theme-slate-gray);
+}
+
+.list-friends{
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-} 
-
-.friend p{
-  margin-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  font-size: 18px;
-}
-ul li{
- list-style: none;
- text-align: left;
 }
 
-.buttonPanel{
-  margin-block: 20px;
-}
+
+
+
+
+
