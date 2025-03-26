@@ -75,7 +75,7 @@ const CalculateComponent = () => {
 
   return (
     <div className="calculator-container">
-      <h2>Paguen sus deudas o sufran las consecuencias</h2>
+      <h2>Paguen sus deudas o sufran las consecuencias.</h2>
       <form className="calculator-form">
         <div className="input-div">
           <input
