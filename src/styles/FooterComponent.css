@@ -1,15 +1,36 @@
 .footer{
     background-color: var(--theme-cherry);
     color: var(--theme-champagne);
-    display: flex;
     margin-top: auto;
-    align-items: flex-end;
-}
 
+}
+.footer-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+    align-items: center;
+}
 .footer p{
     display: flex;
     font-size: 10px;
-    color: aliceblue;
-    padding: 10px;
     margin-bottom: 0;
+    font-size: 16px;
+    font-weight: 500;
 }
+.link-button {
+    display: inline-block; 
+    transition: transform 0.3s ease-in-out;
+    font-size: 30px;
+    color: var(--theme-champagne);
+  }
+  
+  .link-button svg { 
+    transition: transform 0.3s ease-in-out; 
+  }
+
+  .link-button:hover svg {
+    transform: scale(1.2); 
+  }
+  

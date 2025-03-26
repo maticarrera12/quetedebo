@@ -17,33 +17,32 @@
 }
 .input-div {
     display: flex;
-    flex-direction: column; /* Organiza los inputs en columna */
-    width: 100%; /* Asegura que ocupe todo el ancho disponible */
-    max-width: 400px; /* Puedes ajustar este valor si quieres limitar el ancho */
-    gap: 8px; /* Espaciado entre los inputs */
+    flex-direction: column; 
+    width: 100%;
+    max-width: 400px; 
+    gap: 8px; 
     margin-bottom: 8px;  
   }
 
 .input-div input {
-    width: 100%; /* Hace que los inputs ocupen todo el ancho disponible */
+    width: 100%; 
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    box-sizing: border-box; /* Evita que el padding afecte el tamaño total */
   background-color: var(--theme-timberwolf);
   }
 
   .button-container {
-    width: 100%; /* Hace que ocupe todo el ancho disponible */
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 5px; /* Espacio entre el bloque superior y el botón "Calcular" */
+    gap: 5px;
 }
 
 .top-buttons {
     display: flex;
-    gap: 5px; /* Espacio entre "Agregar" y "Borrar" */
+    gap: 5px;
     width: 100%;
 }
 

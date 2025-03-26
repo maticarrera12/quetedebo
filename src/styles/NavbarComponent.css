@@ -30,30 +30,30 @@
 }
 
 .menu ul li {
-    position: relative; /* Necesario para posicionar la barra debajo */
+    position: relative;
     cursor: pointer;
-    padding-bottom: 5px; /* Espacio para la barra de carga */
+    padding-bottom: 1px; 
 }
 
 .menu ul li::after {
     content: "";
     position: absolute;
-    bottom: 0; /* Posiciona la barra al final del li */
+    bottom: 0; 
     left: 0;
     width: 100%;
-    height: 2px; /* Altura de la barra */
-    background-color: var(--theme-slate-gray); /* Color de la barra */
-    transform: scaleX(0); /* Comienza con la barra oculta */
-    transform-origin: bottom right; /* La barra se expandirá desde la derecha */
-    transition: transform 0.3s ease; /* Transición suave */
+    height: 1px;
+    background-color: var(--theme-slate-gray);
+    transform: scaleX(0); 
+    transform-origin: bottom right; 
+    transition: transform 0.3s ease; 
 }
 
 .menu ul li:hover::after {
-    transform: scaleX(1); /* Expande la barra al 100% al hacer hover */
-    transform-origin: bottom left; /* La barra se expande desde la izquierda */
+    transform: scaleX(1); 
+    transform-origin: bottom left;
 }
 
 .menu ul li.selected::after {
-    transform: scaleX(1); /* Mantiene la barra visible cuando está seleccionado */
+    transform: scaleX(1); 
     transform-origin: bottom left;
 }
