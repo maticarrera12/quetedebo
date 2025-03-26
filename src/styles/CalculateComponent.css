@@ -13,6 +13,7 @@
 .calculator-container h2{
   font-weight: bold;
   color: var(--theme-slate-gray);
+  font-size: 24px;
 }
 .input-div {
     display: flex;
@@ -85,6 +86,11 @@ button {
 
 .list-friends{
   display: flex;
+  flex-direction: column;
+}
+
+.transaction-list{
+    display: flex;
   flex-direction: column;
 }
 

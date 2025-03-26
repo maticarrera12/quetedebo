@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import { red } from "@mui/material/colors";
-import '../styles/CalculateComponent.css'
+import "../styles/CalculateComponent.css";
 
 const CalculateComponent = () => {
   const [transacciones, setTransacciones] = useState([]);
@@ -13,11 +13,16 @@ const CalculateComponent = () => {
     0
   );
 
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   const addFriend = () => {
     if (nombre.trim() === "" || gasto.trim() === "") {
       return;
     }
-    const newFriend = { name: nombre, expense: gasto };
+    const formattedName = capitalizeFirstLetter(nombre); // Aplica la transformación
+    const newFriend = { name: formattedName, expense: gasto };
     setAmigos([...amigos, newFriend]);
     setNombre("");
     setGasto("");
@@ -27,7 +32,7 @@ const CalculateComponent = () => {
     setAmigos([]);
     setNombre("");
     setGasto("");
-    setTransacciones([])
+    setTransacciones([]);
   };
 
   const handleCalcular = () => {
@@ -47,25 +52,27 @@ const CalculateComponent = () => {
 
     const transaccionesCalculadas = [];
 
-    deudores.forEach(deudor =>{
-      let deuda = Math.abs(deudor.diferencia)
-      acreedores.forEach(acreedor =>{
-        if(deuda>0){
+    deudores.forEach((deudor) => {
+      let deuda = Math.abs(deudor.diferencia);
+      acreedores.forEach((acreedor) => {
+        if (deuda > 0) {
           const pago = Math.min(deuda, acreedor.diferencia);
           transaccionesCalculadas.push(
-            `${deudor.name} debe $${pago.toFixed(2)} a ${acreedor.name}`)
-            deuda -= pago
-            acreedor.diferencia -= pago;
+            `${deudor.name} debe $${pago.toFixed(2)} a ${acreedor.name}`
+          );
+          deuda -= pago;
+          acreedor.diferencia -= pago;
         }
-      })
-    })
-    setTransacciones(transaccionesCalculadas)
+      });
+    });
+    setTransacciones(transaccionesCalculadas);
   };
 
   const deleteFriend = (index) => {
     const updatedAmigos = amigos.filter((_, i) => i !== index);
     setAmigos(updatedAmigos);
   };
+
   return (
     <div className="calculator-container">
       <h2>Paguen sus deudas o sufran las consecuencias</h2>
@@ -95,7 +102,11 @@ const CalculateComponent = () => {
             <button className="add-button" onClick={addFriend} type="button">
               Agregar
             </button>
-            <button className="delete-button" onClick={resetButton} type="button">
+            <button
+              className="delete-button"
+              onClick={resetButton}
+              type="button"
+            >
               Borrar
             </button>
           </div>
@@ -122,7 +133,7 @@ const CalculateComponent = () => {
           <p>
             <b>Total: ${totalGasto}</b>
           </p>
-          <ul>
+          <ul className="transaction-list">
             {transacciones.map((transaccion, index) => (
               <li key={index}>{transaccion}</li>
             ))}
