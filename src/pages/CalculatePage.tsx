@@ -3,7 +3,7 @@ import { useCalculate } from "../hooks/useCalculate";
 import CustomButton from "../components/CustomButton";
 import { MdDeleteForever } from "react-icons/md";
 
-export const CalculatePage = (props: Props) => {
+export const CalculatePage = () => {
   const {
     friends,
     transactions,
@@ -22,7 +22,7 @@ export const CalculatePage = (props: Props) => {
     Paguen sus deudas o sufran las consecuencias
   </h2>
 
-  <form className="space-y-4">
+  <form className="space-y-2">
     {/* Inputs */}
     <div className="flex gap-4">
       <input

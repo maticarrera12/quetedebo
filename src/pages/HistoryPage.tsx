@@ -1,7 +1,7 @@
 
 const HistoryPage = () => {
   return (
-    <div>HistoryPage</div>
+    <div className="mt-10">HistoryPage</div>
   )
 }
 

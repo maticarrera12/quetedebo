@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import FooterComponent from "./components/FooterComponent"
 import NavbarComponent from "./components/NavbarComponent"
 import { CalculatePage } from "./pages/CalculatePage"
+import HistoryPage from "./pages/HistoryPage";
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <main className="flex-grow flex  justify-center items-center">
         <Routes>
           <Route path="/" element={<CalculatePage />} />
+          <Route path="/history" element={<HistoryPage />} />
         </Routes>
       </main>
       <FooterComponent />
