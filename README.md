@@ -1,54 +1,54 @@
-# React + TypeScript + Vite
+# 💸 QueTeDebo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**QueTeDebo** es una app pensada para cuando salís con tus amig@s, alguien paga la birra, otro la pizza y después nadie sabe quién le debe a quién. Esta app te hace la cuenta justa para que todos pongan lo mismo. Simple, rápida y bien argenta 🇦🇷.
 
-Currently, two official plugins are available:
+🔗 Probala en: [quetedebo.vercel.app](https://quetedebo.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🧉 ¿Para qué sirve?
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Cuando compartís gastos en grupo (una juntada, un finde en la costa, un asado con la banda), muchas veces no todos pagan lo mismo. **QueTeDebo** te dice:
+- Cuánto puso cada uno.
+- Cuánto debería haber puesto.
+- Quién le debe a quién y cuánto, para que quede todo saldado y sin dramas.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Funcionalidades
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- 🧾 Carga de gastos individuales o compartidos.
+- 👥 Selección de quién pagó y quién participó.
+- 💰 Cálculo automático de deudas.
+- 📊 Historial de cálculos anteriores (guardado en el navegador).
+- 🟰 Equiparación justa entre participantes.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 🛠️ Tecnologías
+
+- ⚛️ ReactJS
+- 🟦 TypeScript
+- 🎨 TailwindCSS
+- 💾 LocalStorage
+
+---
+
+## 📸 Capturas
+
+
+---
+
+## 👨‍💻 Autor
+
+Desarrollado con 💙 por [Matías Carrera](https://www.linkedin.com/in/matiascarrera/)
+
+---
+
+## 🧾 Licencia
+
+MIT — Usalo tranquilo, compartilo, mejoralo.
+
+---
+
+> “Las cuentas claras conservan la amistad.” – Algún sabio en una juntada con fernet.
