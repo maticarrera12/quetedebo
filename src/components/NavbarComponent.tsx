@@ -12,7 +12,7 @@ function NavbarComponent(): JSX.Element {
     <div>
       <h1
         onClick={() => navigate('/')}
-        className="text-2xl font-bold text-violet-600 cursor-pointer leading-tight"
+        className="text-3xl font-bold text-violet-600 cursor-pointer leading-tight"
         role="button"
         tabIndex={0}
       >
@@ -23,7 +23,7 @@ function NavbarComponent(): JSX.Element {
 
     {/* Links */}
     <div>
-   <ul className="flex space-x-6 text-gray-700 font-medium">
+   <ul className="flex space-x-6 text-gray-700 font-semibold text-2xl">
   <li
     onClick={() => navigate('/')}
     className={`cursor-pointer transition-colors ${
