@@ -41,7 +41,7 @@ Cuando compartís gastos en grupo (una juntada, un finde en la costa, un asado c
 
 ## 👨‍💻 Autor
 
-Desarrollado con 💙 por [Matías Carrera](https://www.linkedin.com/in/matiascarrera/)
+Desarrollado con 💙 por [Matías Carrera](https://www.linkedin.com/in/matias-carrera)
 
 ---
 
