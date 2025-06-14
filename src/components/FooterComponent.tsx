@@ -16,7 +16,7 @@ function FooterComponent(): JSX.Element {
     {/* Íconos */}
     <div className="flex space-x-4 text-2xl text-gray-500">
       <a
-        href="http://www.linkedin.com/in/matias-carrera-761b45328"
+        href="http://www.linkedin.com/in/matias-carrera"
         target="_blank"
         rel="noopener noreferrer"
         className="hover:text-violet-600 transition-colors"
@@ -32,7 +32,7 @@ function FooterComponent(): JSX.Element {
         <FaGithubSquare size={32}/>
       </a>
       <a
-        href="https://matiascarrera.vercel.app"
+        href="https://matiascarreradev.com"
         target="_blank"
         rel="noopener noreferrer"
         className="hover:text-violet-600 transition-colors"
