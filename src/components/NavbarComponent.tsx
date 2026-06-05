@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import type { JSX } from "react";
 
-import { IoMoonOutline } from "react-icons/io5";
+// import { IoMoonOutline } from "react-icons/io5";
 
 function NavbarComponent(): JSX.Element {
   const navigate = useNavigate();
