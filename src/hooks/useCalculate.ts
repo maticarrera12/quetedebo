@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Friend, TransactionResult } from "../types/types";
+import { calculateSettlements, getTotalExpense } from "../utils/calculateSettlements";
 
 interface UseCalculate {
   friends: Friend[];
@@ -31,44 +32,19 @@ export const useCalculate = (): UseCalculate => {
   };
 
   const calculateTransactions = () => {
-    const totalExpense = friends.reduce(
-      (total, friend) => total + friend.expense,
-      0
-    );
-    const avgExpense = totalExpense / friends.length;
-
-    const differences = friends.map((friend) => ({
-      name: friend.name,
-      difference: friend.expense - avgExpense,
-    }));
-
-    const debtors = differences.filter((d) => d.difference < 0);
-    const creditors = differences.filter((d) => d.difference > 0);
-
-    const transactionsCalculated: string[] = [];
-
-    debtors.forEach((debtor) => {
-      let debt = Math.abs(debtor.difference);
-      creditors.forEach((creditor) => {
-        if (debt > 0 && creditor.difference > 0) {
-          const pay = Math.min(debt, creditor.difference);
-          transactionsCalculated.push(
-            `${debtor.name} debe $${pay.toFixed(2)} a ${creditor.name}`
-          );
-          debt -= pay;
-          creditor.difference -= pay;
-        }
-      });
-    });
+    const transactionsCalculated = calculateSettlements(friends);
+    if (transactionsCalculated.length === 0) return;
 
     const newTransaction: TransactionResult = {
       friends,
-      totalExpense,
+      totalExpense: getTotalExpense(friends),
       transactions: transactionsCalculated,
       date: new Date().toLocaleString(),
     };
 
-    const existing: TransactionResult[] = JSON.parse(localStorage.getItem("calculation") || "[]");
+    const existing: TransactionResult[] = JSON.parse(
+      localStorage.getItem("calculation") || "[]"
+    );
     existing.push(newTransaction);
     localStorage.setItem("calculation", JSON.stringify(existing));
 
