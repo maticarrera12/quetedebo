@@ -4,7 +4,7 @@ import { useCalculate } from "../hooks/useCalculate";
 
 import CustomButton from "../components/CustomButton";
 
-import { MdDeleteForever } from "react-icons/md";
+import { BiTrashAlt } from "react-icons/bi";
 
 import { TiGroup } from "react-icons/ti";
 
@@ -151,9 +151,9 @@ export const CalculatePage = () => {
 
             <CustomButton
               onClick={reset}
-              icon={<MdDeleteForever className="w-4 h-4 shrink-0" />}
+              icon={<BiTrashAlt className="w-4 h-4 shrink-0" />}
               text="Borrar Todo"
-              className="w-full sm:w-1/2 border-destructive/50 text-destructive hover:border-destructive hover:shadow-[0_0_15px_hsl(0_100%_65%_/_0.4)] hover:text-destructive"
+              className="w-full sm:w-1/2 border-primary/50 text-primary hover:border-primary hover:shadow-[0_0_15px_hsl(0_100%_65%_/_0.4)] hover:text-primary"
             />
           </div>
 
@@ -181,9 +181,9 @@ export const CalculatePage = () => {
                     <span className="neon-text-cyan">${friend.expense}</span>
                   </span>
 
-                  <MdDeleteForever
+                  <BiTrashAlt
                     onClick={() => deleteFriend(index)}
-                    className="text-destructive cursor-pointer text-2xl shrink-0 hover:[filter:drop-shadow(0_0_6px_hsl(0_100%_65%_/_0.8))] transition-all"
+                    className="text-primary cursor-pointer text-2xl shrink-0 hover:[filter:drop-shadow(0_0_6px_hsl(0_100%_65%_/_0.8))] transition-all"
                   />
                 </li>
               ))}
