@@ -7,9 +7,9 @@ import HistoryPage from "./pages/HistoryPage";
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen flex flex-col dark neon-bg">
       <NavbarComponent />
-      <main className="flex-grow flex  justify-center items-center">
+      <main className="flex-grow w-full flex justify-center items-start lg:items-center px-4 sm:px-6">
         <Routes>
           <Route path="/" element={<CalculatePage />} />
           <Route path="/history" element={<HistoryPage />} />

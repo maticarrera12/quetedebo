@@ -1,1 +1,374 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --neon-cyan: hsl(186 100% 50%);
+  --neon-magenta: hsl(300 100% 60%);
+  --neon-violet: hsl(262 100% 65%);
+  --neon-pink: hsl(330 100% 60%);
+
+  --background: hsl(0 0% 98%);
+  --foreground: hsl(222 47% 11%);
+
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222 47% 11%);
+
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222 47% 11%);
+
+  --primary: hsl(262 100% 65%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(220 14% 96%);
+  --secondary-foreground: hsl(222 47% 11%);
+
+  --muted: hsl(220 14% 96%);
+  --muted-foreground: hsl(215 16% 47%);
+
+  --accent: hsl(186 100% 50%);
+  --accent-foreground: hsl(230 45% 5%);
+
+  --destructive: hsl(0 100% 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --border: hsl(220 13% 91%);
+  --input: hsl(220 13% 91%);
+  --ring: hsl(262 100% 65%);
+
+  --chart-1: hsl(262 100% 65%);
+  --chart-2: hsl(186 100% 50%);
+  --chart-3: hsl(300 100% 60%);
+  --chart-4: hsl(330 100% 60%);
+  --chart-5: hsl(228 38% 35%);
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(240 60% 4%);
+  --foreground: hsl(0 0% 98%);
+
+  --card: hsl(235 50% 7%);
+  --card-foreground: hsl(0 0% 98%);
+
+  --popover: hsl(235 50% 7%);
+  --popover-foreground: hsl(0 0% 98%);
+
+  --primary: hsl(262 100% 70%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(235 40% 12%);
+  --secondary-foreground: hsl(0 0% 98%);
+
+  --muted: hsl(235 40% 12%);
+  --muted-foreground: hsl(215 30% 70%);
+
+  --accent: hsl(186 100% 55%);
+  --accent-foreground: hsl(230 45% 5%);
+
+  --destructive: hsl(0 100% 65%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --border: hsl(262 60% 25%);
+  --input: hsl(235 40% 14%);
+  --ring: hsl(262 100% 70%);
+
+  --chart-1: hsl(262 100% 70%);
+  --chart-2: hsl(186 100% 55%);
+  --chart-3: hsl(300 100% 65%);
+  --chart-4: hsl(330 100% 65%);
+  --chart-5: hsl(228 38% 45%);
+}
+
+@theme inline {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Orbitron", ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-neon-cyan: var(--neon-cyan);
+  --color-neon-magenta: var(--neon-magenta);
+  --color-neon-violet: var(--neon-violet);
+  --color-neon-pink: var(--neon-pink);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+.neon-bg {
+  background-color: hsl(240 60% 4%);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, hsl(262 100% 50% / 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, hsl(186 100% 50% / 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, hsl(300 100% 50% / 0.05) 0%, transparent 70%),
+    linear-gradient(hsl(262 60% 25% / 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(262 60% 25% / 0.08) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+}
+
+.neon-text {
+  font-family: var(--font-display);
+  color: var(--neon-violet);
+  text-shadow:
+    0 0 7px hsl(262 100% 65% / 0.8),
+    0 0 20px hsl(262 100% 65% / 0.5),
+    0 0 40px hsl(262 100% 65% / 0.3);
+}
+
+.neon-text-cyan {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 7px hsl(186 100% 50% / 0.8),
+    0 0 20px hsl(186 100% 50% / 0.5);
+}
+
+.neon-text-accent {
+  color: var(--primary);
+  text-shadow:
+    0 0 7px hsl(262 100% 70% / 0.9),
+    0 0 20px hsl(262 100% 70% / 0.5);
+}
+
+.card {
+  position: relative;
+  padding: 1rem;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(hsl(235 50% 7% / 0.85), hsl(235 50% 7% / 0.85)) padding-box,
+    linear-gradient(
+      135deg,
+      hsl(262 100% 65% / 0.9),
+      hsl(186 100% 50% / 0.6),
+      hsl(300 100% 60% / 0.9)
+    ) border-box;
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: 1.5rem;
+  }
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  pointer-events: none;
+
+  background: linear-gradient(
+    135deg,
+    hsl(262 100% 65%),
+    hsl(186 100% 50%),
+    hsl(300 100% 60%)
+  );
+
+  filter: blur(4px);
+  opacity: 0.18;
+}
+
+.neon-input {
+  background: hsl(235 40% 10% / 0.8);
+  border: 1px solid hsl(262 80% 50% / 0.35);
+  transition: all 0.3s ease;
+}
+
+.neon-input:focus {
+  border-color: hsl(262 100% 65% / 0.8);
+  box-shadow:
+    0 0 8px hsl(262 100% 65% / 0.4),
+    0 0 20px hsl(262 100% 65% / 0.2),
+    inset 0 0 8px hsl(262 100% 65% / 0.05);
+}
+
+.neon-list-item {
+  background: hsl(235 40% 12% / 0.6);
+  border: 1px solid hsl(262 80% 50% / 0.25);
+  transition: all 0.3s ease;
+}
+
+.neon-list-item:hover {
+  border-color: hsl(262 100% 65% / 0.5);
+  box-shadow: 0 0 12px hsl(262 100% 65% / 0.2);
+}
+
+.neon-icon-wrap {
+  background: hsl(262 100% 65% / 0.1);
+  border: 1px solid hsl(262 100% 65% / 0.4);
+  box-shadow:
+    0 0 10px hsl(262 100% 65% / 0.3),
+    inset 0 0 10px hsl(262 100% 65% / 0.05);
+  color: var(--neon-violet);
+}
+
+.neon-nav {
+  border-bottom: 1px solid hsl(262 80% 50% / 0.3);
+  box-shadow:
+    0 4px 20px hsl(262 100% 65% / 0.1),
+    0 1px 0 hsl(186 100% 50% / 0.15);
+}
+
+.neon-footer {
+  border: 1px solid hsl(262 80% 50% / 0.35);
+  box-shadow:
+    0 0 20px hsl(262 100% 65% / 0.15),
+    inset 0 0 20px hsl(262 100% 65% / 0.03);
+}
+
+.neon-stat {
+  background: hsl(235 40% 10% / 0.7);
+  border: 1px solid hsl(186 100% 50% / 0.35);
+  box-shadow:
+    0 0 15px hsl(186 100% 50% / 0.15),
+    inset 0 0 15px hsl(186 100% 50% / 0.03);
+}
+
+.neon-transaction {
+  color: hsl(186 100% 70%);
+  text-shadow: 0 0 8px hsl(186 100% 50% / 0.4);
+}
+
+.neon-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(262 100% 65% / 0.55) hsl(235 40% 12% / 0.4);
+}
+
+.neon-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.neon-scrollbar::-webkit-scrollbar-track {
+  background: hsl(235 40% 12% / 0.4);
+  border-radius: 999px;
+  margin-block: 4px;
+}
+
+.neon-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    hsl(262 100% 65% / 0.85),
+    hsl(186 100% 50% / 0.75)
+  );
+  border-radius: 999px;
+  border: 1px solid hsl(262 80% 50% / 0.25);
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.neon-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    hsl(262 100% 70%),
+    hsl(186 100% 55%)
+  );
+  box-shadow: 0 0 8px hsl(262 100% 65% / 0.5);
+}
+
+.neon-stepper {
+  background: hsl(235 40% 10% / 0.8);
+  border: 1px solid hsl(262 80% 50% / 0.35);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.neon-stepper:focus-within {
+  border-color: hsl(262 100% 65% / 0.8);
+  box-shadow:
+    0 0 8px hsl(262 100% 65% / 0.4),
+    0 0 20px hsl(262 100% 65% / 0.2),
+    inset 0 0 8px hsl(262 100% 65% / 0.05);
+}
+
+.neon-stepper-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  min-height: 2.75rem;
+  flex-shrink: 0;
+  color: var(--neon-violet);
+  background: hsl(262 100% 65% / 0.08);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.neon-stepper-btn:hover {
+  background: hsl(262 100% 65% / 0.2);
+  color: var(--neon-cyan);
+  box-shadow: inset 0 0 12px hsl(262 100% 65% / 0.15);
+}
+
+.neon-stepper-btn:active {
+  transform: scale(0.92);
+}
+
+.neon-stepper-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.neon-stepper-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  text-align: center;
+  color: var(--foreground);
+  outline: none;
+  padding: 0.625rem 0.25rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+  .neon-stepper-btn {
+    width: 2.25rem;
+    min-height: auto;
+  }
+}
+
+.neon-stepper-input::-webkit-inner-spin-button,
+.neon-stepper-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.neon-stepper-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
