@@ -1,67 +1,38 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import type { JSX } from "react";
 
-// import { IoMoonOutline } from "react-icons/io5";
+const linkClass = ({ isActive }: { isActive: boolean }) =>
+  `rounded-full px-4 py-2 text-[15px] font-medium transition-colors duration-150 ${
+    isActive ? "bg-ink text-ground" : "text-muted hover:text-accent-deep"
+  }`;
+
+// Three friends sharing one table.
+const Mark = () => (
+  <span aria-hidden="true" className="flex">
+    <span className="h-[22px] w-[22px] rounded-full border-2 border-ground bg-accent" />
+    <span className="-ml-[9px] h-[22px] w-[22px] rounded-full border-2 border-ground bg-honey" />
+    <span className="-ml-[9px] h-[22px] w-[22px] rounded-full border-2 border-ground bg-sage" />
+  </span>
+);
 
 function NavbarComponent(): JSX.Element {
-  const navigate = useNavigate();
-
-  const location = useLocation();
-
   return (
-    <nav className="bg-background/60 backdrop-blur-md neon-nav py-3 sm:py-4 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        {/* Logo */}
+    <header className="mx-auto flex w-full max-w-[1180px] items-center justify-between gap-4 px-4 py-5 sm:px-7">
+      <NavLink to="/" className="flex items-center gap-3 text-[21px] font-bold tracking-[-0.02em]">
+        <Mark />
+        ¿Qué te debo?
+      </NavLink>
 
-        <div className="text-center sm:text-left">
-          <h1
-            onClick={() => navigate("/")}
-            className="text-2xl sm:text-3xl font-bold neon-text cursor-pointer leading-tight tracking-wide"
-            role="button"
-            tabIndex={0}
-          >
-            ¿Qué te debo?
-          </h1>
-
-          <p className="text-sm sm:text-base text-muted-foreground neon-text-cyan mt-0.5">
-            Dividi gastos de forma simple y justa
-          </p>
-        </div>
-
-        {/* Links */}
-
-        <div className="flex items-center justify-center sm:justify-end gap-5 sm:gap-6">
-          <ul className="flex gap-5 sm:gap-6 text-foreground font-semibold text-lg sm:text-xl lg:text-2xl font-[family-name:var(--font-display)]">
-            <li
-              onClick={() => navigate("/")}
-              className={`cursor-pointer transition-all duration-300 ${
-                location.pathname === "/"
-                  ? "neon-text-accent"
-                  : "hover:text-primary hover:[text-shadow:0_0_12px_hsl(262_100%_70%_/_0.6)]"
-              }`}
-            >
-              Inicio
-            </li>
-
-            <li
-              onClick={() => navigate("/history")}
-              className={`cursor-pointer transition-all duration-300 ${
-                location.pathname === "/history"
-                  ? "neon-text-accent"
-                  : "hover:text-primary hover:[text-shadow:0_0_12px_hsl(262_100%_70%_/_0.6)]"
-              }`}
-            >
-              Historial
-            </li>
-          </ul>
-
-          {/* <button className="text-2xl text-foreground hover:text-accent transition-all duration-300 hover:[text-shadow:0_0_12px_hsl(186_100%_50%_/_0.7)]">
-            <IoMoonOutline className="text-2xl cursor-pointer" />
-          </button> */}
-        </div>
-      </div>
-    </nav>
+      <nav aria-label="Principal" className="flex gap-1.5">
+        <NavLink to="/" end className={linkClass}>
+          Inicio
+        </NavLink>
+        <NavLink to="/history" className={linkClass}>
+          Historial
+        </NavLink>
+      </nav>
+    </header>
   );
 }
 

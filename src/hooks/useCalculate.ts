@@ -5,21 +5,26 @@ import { calculateSettlements, getTotalExpense } from "../utils/calculateSettlem
 interface UseCalculate {
   friends: Friend[];
   transactions: string[];
-  addFriend: (name: string, expense: string) => void;
+  addFriend: (name: string, expense: string, concept?: string) => void;
   deleteFriend: (index: number) => void;
   reset: () => void;
-  calculateTransactions: () => void;
+  calculateTransactions: (eventName?: string) => void;
 }
 
 export const useCalculate = (): UseCalculate => {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [transactions, setTransactions] = useState<string[]>([]);
 
-  const addFriend = (name: string, expense: string) => {
+  const addFriend = (name: string, expense: string, concept = "") => {
     const formattedName =
       name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-    const newFriend: Friend = { name: formattedName, expense: Number(expense) };
-    setFriends((prev) => [...prev, newFriend]);
+
+    setFriends((prev) => {
+      // Each friend keeps one colour for the whole session, even when others leave.
+      const color = prev.length ? Math.max(...prev.map((friend) => friend.color ?? 0)) + 1 : 0;
+      const newFriend: Friend = { name: formattedName, expense: Number(expense), concept, color };
+      return [...prev, newFriend];
+    });
   };
 
   const deleteFriend = (index: number) => {
@@ -31,15 +36,19 @@ export const useCalculate = (): UseCalculate => {
     setTransactions([]);
   };
 
-  const calculateTransactions = () => {
+  const calculateTransactions = (eventName?: string) => {
     const transactionsCalculated = calculateSettlements(friends);
-    if (transactionsCalculated.length === 0) return;
+    if (transactionsCalculated.length === 0) {
+      setTransactions([]);
+      return;
+    }
 
     const newTransaction: TransactionResult = {
       friends,
       totalExpense: getTotalExpense(friends),
       transactions: transactionsCalculated,
       date: new Date().toLocaleString(),
+      ...(eventName ? { eventName } : {}),
     };
 
     const existing: TransactionResult[] = JSON.parse(
