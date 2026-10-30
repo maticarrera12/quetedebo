@@ -25,12 +25,19 @@ try {
       .replace('<div id="root"></div>', `<div id="root">${render(route.path)}</div>`)
       .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
       .replace(/(<meta\s+name="description"\s+content=")[^"]*"/, `$1${description}"`)
-      .replace(/(<link rel="canonical" href=")[^"]*"/, `$1${url}"`)
+      .replace(
+        /<link rel="canonical" href="[^"]*" \/>/,
+        route.errorFile ? '<meta name="robots" content="noindex" />' : `<link rel="canonical" href="${url}" />`
+      )
       .replace(/(<meta property="og:title" content=")[^"]*"/, `$1${title}"`)
       .replace(/(<meta name="twitter:title" content=")[^"]*"/, `$1${title}"`)
       .replace(/(<meta property="og:url" content=")[^"]*"/, `$1${url}"`);
 
-    const file = route.path === "/" ? join(dist, "index.html") : join(dist, route.path, "index.html");
+    const file = route.errorFile
+      ? join(dist, route.errorFile)
+      : route.path === "/"
+        ? join(dist, "index.html")
+        : join(dist, route.path, "index.html");
     await mkdir(dirname(file), { recursive: true });
     await writeFile(file, html);
     console.log(`prerendered ${route.path} -> ${file.replace(root + "/", "")}`);

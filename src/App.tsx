@@ -10,6 +10,7 @@ import { INTENT_PAGES } from "./content/intents"
 import { useIsMobile } from "./hooks/useMediaQuery"
 import { CalculatePage } from "./pages/CalculatePage"
 import HistoryPage from "./pages/HistoryPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
             />
           ))}
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
 
