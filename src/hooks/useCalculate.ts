@@ -1,6 +1,11 @@
 import { useState } from "react";
 import type { Friend, TransactionResult } from "../types/types";
 import { calculateSettlements, getTotalExpense } from "../utils/calculateSettlements";
+import { isFriendList } from "../utils/storage";
+import { usePersistedState } from "./usePersistedState";
+
+// The table in progress: it must outlive a reload or the system closing the app in the background.
+const FRIENDS_KEY = "quetedebo:draft:friends";
 
 interface UseCalculate {
   friends: Friend[];
@@ -12,7 +17,7 @@ interface UseCalculate {
 }
 
 export const useCalculate = (): UseCalculate => {
-  const [friends, setFriends] = useState<Friend[]>([]);
+  const [friends, setFriends] = usePersistedState<Friend[]>(FRIENDS_KEY, [], isFriendList);
   const [transactions, setTransactions] = useState<string[]>([]);
 
   const addFriend = (name: string, expense: string, concept = "") => {

@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     react(),
     VitePWA({
-      // The table lives in memory, so a new version must never reload the page by itself.
+      // A new version waits for the person: it must never reload the page while they are typing.
       registerType: 'prompt',
       injectRegister: false,
       manifest: {

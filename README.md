@@ -27,7 +27,7 @@
 - 📚 Historial de juntadas guardadas, **en tu navegador** (no hay cuentas ni servidor).
 - 🇦🇷 Montos al estilo argentino: `28.000`, `1200,50`.
 
-Por ahora el historial vive en el dispositivo donde lo guardás: no se comparte entre celulares.
+La mesa en curso y el historial se guardan **en el dispositivo**: si cerrás la app o recargás, la mesa sigue ahí. Por ahora no se comparten entre celulares.
 
 ---
 

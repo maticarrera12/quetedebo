@@ -1,12 +1,14 @@
 import { useMemo, useRef, useState } from "react";
 
 import { useCalculate } from "../hooks/useCalculate";
+import { usePersistedState } from "../hooks/usePersistedState";
 
 import Avatar from "../components/Avatar";
 import RoundTable from "../components/RoundTable";
 import SettlementCard from "../components/SettlementCard";
 
 import { calculateSettlements } from "../utils/calculateSettlements";
+import { isBooleanMap, isString } from "../utils/storage";
 import { money, parseAmount, parseSettlement, personColor } from "../utils/format";
 import type { Settlement } from "../utils/format";
 
@@ -24,7 +26,7 @@ const signatureOf = (friends: { name: string; expense: number }[]) =>
 export const CalculatePage = () => {
   const { friends, addFriend, deleteFriend, reset, calculateTransactions } = useCalculate();
 
-  const [eventName, setEventName] = useState<string>("");
+  const [eventName, setEventName] = usePersistedState<string>("quetedebo:draft:event", "", isString);
 
   const [name, setName] = useState<string>("");
 
@@ -39,7 +41,7 @@ export const CalculatePage = () => {
   const [confirmingReset, setConfirmingReset] = useState<boolean>(false);
 
   // Keyed by who pays whom and how much, so a changed amount is never shown as already paid.
-  const [paid, setPaid] = useState<Record<string, boolean>>({});
+  const [paid, setPaid] = usePersistedState<Record<string, boolean>>("quetedebo:draft:paid", {}, isBooleanMap);
 
   const [copied, setCopied] = useState<boolean>(false);
 
@@ -91,6 +93,8 @@ export const CalculatePage = () => {
 
     setPaid({});
 
+    setEventName("");
+
     setSavedFor(null);
 
     setConfirmingReset(false);
@@ -132,7 +136,7 @@ export const CalculatePage = () => {
             aria-label="Nombre de la juntada"
             placeholder="Ponele nombre a la juntada"
             size={Math.max(eventName.length, 26)}
-            className="max-w-full self-start rounded-full bg-sand px-3.5 py-2 text-sm font-semibold text-sand-ink placeholder:text-sand-ink focus:ring-2 focus:ring-accent-deep"
+            className="max-w-full self-start rounded-full bg-sand px-3.5 py-2 text-base font-semibold text-sand-ink sm:text-sm placeholder:text-sand-ink focus:ring-2 focus:ring-accent-deep"
           />
 
           <h1 className="text-[clamp(40px,5vw,68px)] leading-[0.95] font-extrabold tracking-[-0.045em] text-balance">
