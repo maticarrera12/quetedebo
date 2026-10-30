@@ -33,7 +33,7 @@ export default defineConfig({
       },
       workbox: {
         // App shell, the icons and the Latin subsets of the font; not the share image.
-        globPatterns: ['**/*.{js,css,html,ico}', 'icons/*.png', 'assets/*latin*opsz*.woff2'],
+        globPatterns: ['**/*.{js,css,html,ico,svg}', 'icons/*.png', 'assets/*latin*opsz*.woff2'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
       },

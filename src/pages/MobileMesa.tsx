@@ -73,8 +73,8 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
       <>
         <div className="px-4 pt-[calc(0.5rem+env(safe-area-inset-top))]">
           <div className="flex h-14 items-center gap-3">
-            <Mark />
-            <span className="text-xl font-extrabold tracking-[-0.02em]">¿Qué te debo?</span>
+            <Mark size={34} />
+            <span className="text-xl font-extrabold tracking-[-0.02em]"><span className="sr-only">¿</span>Qué te debo?</span>
           </div>
 
           <input
@@ -118,7 +118,7 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
     <>
       <div className="pt-[env(safe-area-inset-top)]">
         <header className="flex h-16 items-center gap-3 pr-3 pl-4">
-          <Mark />
+          <Mark size={34} />
 
           <div className="flex min-w-0 flex-1 flex-col">
             <h1 className="sr-only">La mesa de la juntada</h1>
