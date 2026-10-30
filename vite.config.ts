@@ -5,6 +5,12 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // The prerender script loads the app through Vite; the router must go through it as ESM.
+  // Without the `node` condition it resolves to the router's ESM build instead of its CommonJS one.
+  ssr: {
+    noExternal: ['react-router', 'react-router-dom'],
+    resolve: { conditions: ['import', 'module', 'production'] },
+  },
   plugins: [
     tailwindcss(),
     react(),
