@@ -3,6 +3,7 @@ import FooterComponent from "./components/FooterComponent"
 import NavbarComponent from "./components/NavbarComponent"
 import { CalculatePage } from "./pages/CalculatePage"
 import HistoryPage from "./pages/HistoryPage";
+import UpdatePrompt from "./components/UpdatePrompt";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         </Routes>
       </main>
       <FooterComponent />
+      <UpdatePrompt />
     </div>
   );
 }
