@@ -1,5 +1,7 @@
 import type { JSX } from "react";
 
+import { useInstall } from "../hooks/useInstall";
+
 const links = [
   { label: "LinkedIn", href: "http://www.linkedin.com/in/matias-carrera" },
   { label: "GitHub", href: "https://github.com/maticarrera12" },
@@ -7,6 +9,8 @@ const links = [
 ];
 
 function FooterComponent(): JSX.Element {
+  const { mode, bannerVisible, install, reopen } = useInstall();
+
   return (
     <footer className="mx-auto w-full max-w-[1180px] px-4 pb-8 sm:px-7">
       <div className="flex flex-wrap justify-between gap-4 border-t border-line pt-6 text-[15px] text-muted">
@@ -14,7 +18,20 @@ function FooterComponent(): JSX.Element {
           &copy; {new Date().getFullYear()} <span className="font-semibold text-ink">Matias Carrera</span>
         </p>
 
-        <ul className="flex gap-5">
+        <ul className="flex flex-wrap gap-5">
+          {/* The way back to the install notice once it was dismissed. */}
+          {mode && !bannerVisible && (
+            <li>
+              <button
+                type="button"
+                onClick={mode === "native" ? install : reopen}
+                className="font-semibold text-ink transition-colors duration-150 hover:text-accent-deep"
+              >
+                Instalar app
+              </button>
+            </li>
+          )}
+
           {links.map((link) => (
             <li key={link.label}>
               <a
