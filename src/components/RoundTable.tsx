@@ -6,10 +6,12 @@ import type { Friend } from "../types/types";
 interface RoundTableProps {
   friends: Friend[];
   total: number;
+  // The phone version: a fixed 232px table, smaller seats and no names (they are in the list).
+  compact?: boolean;
 }
 
 // The whole group around one table: the total in the middle, each friend on a seat.
-const RoundTable = ({ friends, total }: RoundTableProps) => {
+const RoundTable = ({ friends, total, compact = false }: RoundTableProps) => {
   const count = friends.length;
   const perPerson = count ? total / count : 0;
 
@@ -21,20 +23,40 @@ const RoundTable = ({ friends, total }: RoundTableProps) => {
           ? `En la mesa: ${friends.map((friend) => friend.name).join(", ")}`
           : "La mesa está vacía"
       }
-      className="round-table relative aspect-square w-[calc(100%-6rem)] max-w-[480px] justify-self-center sm:w-full"
+      className={
+        compact
+          ? "round-table relative mx-auto aspect-square w-[232px] overflow-visible"
+          : "round-table relative aspect-square w-[calc(100%-6rem)] max-w-[480px] justify-self-center sm:w-full"
+      }
     >
-      <div className="absolute inset-[15%] flex flex-col items-center justify-center gap-1 rounded-full bg-accent-deep text-center text-white shadow-[inset_0_0_0_10px_rgba(255,255,255,0.12)]">
-        <span className="text-[15px] font-medium">Total de la juntada</span>
+      <div
+        className={`absolute flex flex-col items-center justify-center gap-1 rounded-full bg-accent-deep text-center text-white ${
+          compact
+            ? "inset-[18%] shadow-[inset_0_0_0_6px_rgba(255,255,255,0.12)]"
+            : "inset-[15%] shadow-[inset_0_0_0_10px_rgba(255,255,255,0.12)]"
+        }`}
+      >
+        <span className={compact ? "text-xs font-semibold" : "text-[15px] font-medium"}>
+          {compact ? "Total" : "Total de la juntada"}
+        </span>
 
         <MoneyFigure
           amount={total}
-          className="text-[clamp(32px,5vw,52px)] leading-none font-extrabold tracking-[-0.04em]"
+          className={`leading-none font-extrabold tracking-[-0.04em] ${
+            compact ? "text-[30px]" : "text-[clamp(32px,5vw,52px)]"
+          }`}
           centsClassName="opacity-80"
         />
 
-        <span className="mt-1.5 rounded-full bg-ink/25 px-3 py-1 text-[15px] font-semibold">
-          {count ? `${money(perPerson)} cada uno` : "La mesa está vacía"}
-        </span>
+        {(!compact || count === 0) && (
+          <span
+            className={`rounded-full bg-ink/25 font-semibold ${
+              compact ? "mt-1 px-2.5 py-0.5 text-xs" : "mt-1.5 px-3 py-1 text-[15px]"
+            }`}
+          >
+            {count ? `${money(perPerson)} cada uno` : "La mesa está vacía"}
+          </span>
+        )}
       </div>
 
       <div aria-hidden="true" className="orbit absolute inset-0">
@@ -54,12 +76,14 @@ const RoundTable = ({ friends, total }: RoundTableProps) => {
                 <Avatar
                   name={friend.name}
                   color={personColor(friends, friend.name)}
-                  size={62}
+                  size={compact ? 40 : 62}
                   ring="var(--ground)"
                 />
               </span>
 
-              <span className="rounded-full bg-ground px-2 text-[13px] font-semibold">{friend.name}</span>
+              {!compact && (
+                <span className="rounded-full bg-ground px-2 text-[13px] font-semibold">{friend.name}</span>
+              )}
             </div>
           );
         })}
