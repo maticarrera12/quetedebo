@@ -1,12 +1,7 @@
 import type { JSX } from "react";
 
 import { useInstall } from "../hooks/useInstall";
-
-const links = [
-  { label: "LinkedIn", href: "http://www.linkedin.com/in/matias-carrera" },
-  { label: "GitHub", href: "https://github.com/maticarrera12" },
-  { label: "Web", href: "https://matiascarreradev.com" },
-];
+import { EXTERNAL_LINKS } from "../utils/links";
 
 function FooterComponent(): JSX.Element {
   const { mode, bannerVisible, install, reopen } = useInstall();
@@ -32,7 +27,7 @@ function FooterComponent(): JSX.Element {
             </li>
           )}
 
-          {links.map((link) => (
+          {EXTERNAL_LINKS.map((link) => (
             <li key={link.label}>
               <a
                 href={link.href}
