@@ -45,11 +45,11 @@ Por ahora el historial vive en el dispositivo donde lo guardás: no se comparte 
 ## 💻 Correrlo en tu compu
 
 ```bash
-npm install
-npm run dev      # servidor de desarrollo
-npm test         # tests de la cuenta y los helpers
-npm run build    # typecheck + build de producción
-npm run lint
+pnpm install
+pnpm dev          # servidor de desarrollo
+pnpm test         # tests de la cuenta y los helpers
+pnpm build        # typecheck + build de producción
+pnpm lint
 ```
 
 La lógica de la cuenta está en `src/utils/calculateSettlements.ts`: trabaja en centavos para no perder plata por decimales flotantes y tiene tests que lo cubren.
