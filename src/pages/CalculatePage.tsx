@@ -136,7 +136,7 @@ export const CalculatePage = () => {
             aria-label="Nombre de la juntada"
             placeholder="Ponele nombre a la juntada"
             size={Math.max(eventName.length, 26)}
-            className="max-w-full self-start rounded-full bg-sand px-3.5 py-2 text-sm font-semibold text-sand-ink placeholder:text-sand-ink focus:ring-2 focus:ring-accent-deep"
+            className="max-w-full self-start rounded-full bg-sand px-3.5 py-2 text-base font-semibold text-sand-ink sm:text-sm placeholder:text-sand-ink focus:ring-2 focus:ring-accent-deep"
           />
 
           <h1 className="text-[clamp(40px,5vw,68px)] leading-[0.95] font-extrabold tracking-[-0.045em] text-balance">

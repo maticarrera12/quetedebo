@@ -51,6 +51,13 @@
 }
 
 @layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    /* No pull-to-refresh: on an installed app it reloads the page. */
+    overscroll-behavior: none;
+  }
+
   *,
   ::after,
   ::before {
@@ -79,6 +86,25 @@
   button:not(:disabled),
   a {
     cursor: pointer;
+  }
+
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Text that is a control is not content: a long press must not select it. */
+  button,
+  [role="button"] {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* With the browser's tap highlight gone, the press has to show itself. */
+  button:not(:disabled):active {
+    transform: scale(0.97);
   }
 }
 
@@ -119,9 +145,12 @@
   transform: translate(-50%, -50%) rotate(calc(var(--spin) * -1));
 }
 
-/* Hovering the table stops it, so a name can be read or a seat pointed at. */
-.round-table:hover {
-  animation-play-state: paused;
+/* Hovering the table stops it, so a name can be read or a seat pointed at. Only for a real
+   pointer: on a phone a tap leaves :hover stuck and the table would stay paused. */
+@media (hover: hover) and (pointer: fine) {
+  .round-table:hover {
+    animation-play-state: paused;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

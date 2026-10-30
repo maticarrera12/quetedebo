@@ -18,7 +18,7 @@ const Mark = () => (
 
 function NavbarComponent(): JSX.Element {
   return (
-    <header className="mx-auto flex w-full max-w-[1180px] items-center justify-between gap-4 px-4 py-5 sm:px-7">
+    <header className="mx-auto flex w-full max-w-[1180px] items-center justify-between gap-4 px-4 pt-[calc(1.25rem+env(safe-area-inset-top))] pb-5 sm:px-7">
       <NavLink to="/" className="flex items-center gap-3 text-[21px] font-bold tracking-[-0.02em]">
         <Mark />
         ¿Qué te debo?
