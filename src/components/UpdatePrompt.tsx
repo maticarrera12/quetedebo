@@ -20,7 +20,7 @@ const UpdatePrompt = () => {
   return (
     <div
       role="status"
-      className="fixed inset-x-4 bottom-4 z-10 mx-auto flex max-w-[560px] flex-wrap items-center gap-x-4 gap-y-3 rounded-[18px] bg-panel p-4 text-ground shadow-[0_12px_32px_-12px_rgba(35,25,15,0.5)]"
+      className="pointer-events-auto flex flex-wrap items-center gap-x-4 gap-y-3 rounded-[18px] bg-panel p-4 text-ground shadow-[0_12px_32px_-12px_rgba(35,25,15,0.5)]"
     >
       <p className="min-w-0 flex-1 basis-56 text-[15px]">
         Hay una versión nueva. Al actualizar se reinicia la mesa: guardala primero si la necesitás.

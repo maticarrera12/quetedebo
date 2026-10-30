@@ -1,9 +1,10 @@
 import { Route, Routes } from "react-router-dom"
 import FooterComponent from "./components/FooterComponent"
+import InstallPrompt from "./components/InstallPrompt"
 import NavbarComponent from "./components/NavbarComponent"
+import UpdatePrompt from "./components/UpdatePrompt"
 import { CalculatePage } from "./pages/CalculatePage"
 import HistoryPage from "./pages/HistoryPage";
-import UpdatePrompt from "./components/UpdatePrompt";
 
 
 function App() {
@@ -17,7 +18,12 @@ function App() {
         </Routes>
       </main>
       <FooterComponent />
-      <UpdatePrompt />
+
+      {/* One stack for the install and update notices, so they never cover each other. */}
+      <div className="pointer-events-none fixed inset-x-4 bottom-4 z-10 mx-auto flex max-w-[560px] flex-col gap-3">
+        <UpdatePrompt />
+        <InstallPrompt />
+      </div>
     </div>
   );
 }
