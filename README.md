@@ -11,7 +11,7 @@
 1. **Sentá a tus amigos a la mesa**: nombre, qué trajo (opcional) y cuánto puso.
 2. **Mirá la mesa**: el total de la juntada y lo que le toca poner a cada uno.
 3. **Fijate quién le pasa a quién**: la cuenta se actualiza en vivo, a medida que cargás gente.
-4. **Marcá lo que ya se pagó**, copiá el resumen para el grupo de WhatsApp y guardá la juntada en el historial.
+4. **Marcá lo que ya se pagó** y copiá el resumen para el grupo de WhatsApp. La juntada se guarda sola en el historial en cuanto hay pagos para hacer, y se actualiza cada vez que alguien se suma o cambia algo.
 5. **¿Querés que cada uno cargue lo suyo?** Tocá *Compartir la mesa con el grupo*: se crea una mesa compartida con un link. Mandalo al grupo y cada uno suma su nombre y su gasto desde su celular. Todos ven la misma mesa, actualizada en vivo, y cualquiera con el link puede cambiar o sacar a cualquiera.
 
 > La cuenta es **pareja entre todos los que están en la mesa**: cada uno pone la misma parte del total. Si alguien no participó de un gasto, todavía no hay forma de excluirlo.
@@ -27,7 +27,7 @@
 - 📋 Copiar un resumen para pegar en el grupo.
 - 🔗 Mesa compartida: un link para el grupo y cada uno suma lo suyo, en vivo.
 - ✏️ Cambiar los datos de alguien que ya está en la mesa.
-- 📚 Historial de juntadas guardadas, **en tu navegador** (no hay cuentas ni servidor).
+- 📚 Historial automático de juntadas, **en tu navegador**: una entrada por mesa, que se actualiza sola.
 - 🇦🇷 Montos al estilo argentino: `28.000`, `1200,50`.
 
 La mesa en curso y el historial se guardan **en el dispositivo**: si cerrás la app o recargás, la mesa sigue ahí. Las mesas compartidas viven en [Supabase](https://supabase.com) y las ve cualquiera que tenga el link.

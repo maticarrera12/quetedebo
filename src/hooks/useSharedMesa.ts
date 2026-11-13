@@ -3,7 +3,7 @@ import type { RealtimeChannel } from "@supabase/supabase-js";
 
 import { useAddFriendForm } from "./useAddFriendForm";
 import { useCreateSharedMesa } from "./useCreateSharedMesa";
-import { useHistorySave, useMesaSummary } from "./useMesa";
+import { useAutoHistory, useMesaSummary } from "./useMesa";
 import type { Mesa } from "./useMesa";
 import { usePersistedState } from "./usePersistedState";
 
@@ -174,7 +174,7 @@ export const useSharedMesa = (mesaId: string): Mesa & { status: SharedMesaStatus
   const freshMesa = useCreateSharedMesa();
 
   const summary = useMesaSummary(participants, paid);
-  const { isSaved, handleSave } = useHistorySave(participants, eventName);
+  useAutoHistory(participants, eventName, mesaId);
 
   const startEdit = (index: number) => {
     const participant = participants[index];
@@ -237,8 +237,6 @@ export const useSharedMesa = (mesaId: string): Mesa & { status: SharedMesaStatus
     confirmingReset,
     setConfirmingReset,
     handleReset: () => setConfirmingReset(false),
-    isSaved,
-    handleSave,
     copied,
     handleShare: () => void handleShare(),
     sharing: null,

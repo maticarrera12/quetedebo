@@ -3,9 +3,10 @@ import { calculateSettlements, getTotalExpense } from "./calculateSettlements";
 
 const HISTORY_KEY = "calculation";
 
-// Appends a finished mesa to this device's history. Returns false when there is nothing to
-// settle, because a mesa where nobody owes anything is not worth keeping.
-export const saveToHistory = (friends: Friend[], eventName?: string): boolean => {
+// Saves a mesa to this device's history. With a mesaId the mesa keeps a single entry, updated in
+// place as people join or change; without one, each call appends. Returns false when there is
+// nothing to settle, because a mesa where nobody owes anything is not worth keeping.
+export const saveToHistory = (friends: Friend[], eventName?: string, mesaId?: string): boolean => {
   const transactions = calculateSettlements(friends);
   if (transactions.length === 0) return false;
 
@@ -16,11 +17,16 @@ export const saveToHistory = (friends: Friend[], eventName?: string): boolean =>
     transactions,
     date: new Date().toLocaleString(),
     ...(eventName ? { eventName } : {}),
+    ...(mesaId ? { mesaId } : {}),
   };
 
   try {
     const existing: TransactionResult[] = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
-    existing.push(entry);
+    const index = mesaId ? existing.findIndex((saved) => saved.mesaId === mesaId) : -1;
+
+    if (index === -1) existing.push(entry);
+    else existing[index] = entry;
+
     localStorage.setItem(HISTORY_KEY, JSON.stringify(existing));
     return true;
   } catch {

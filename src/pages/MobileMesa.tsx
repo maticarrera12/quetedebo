@@ -48,8 +48,6 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
     confirmingReset,
     setConfirmingReset,
     handleReset,
-    isSaved,
-    handleSave,
     copied,
     handleShare,
     sharing,
@@ -275,16 +273,9 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
                   })}
                 </ul>
 
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  disabled={isSaved}
-                  className="mt-1 flex min-h-11 w-full items-center justify-center text-[15px] font-bold text-ink disabled:text-muted"
-                >
-                  {isSaved
-                    ? "Guardada en el historial"
-                    : `${settledCount} de ${settlements.length} saldados · Guardar en el historial`}
-                </button>
+                <p className="mt-1 flex min-h-11 w-full items-center justify-center text-center text-sm font-semibold text-muted">
+                  {settledCount} de {settlements.length} saldados · Se guarda sola en el historial
+                </p>
               </>
             )}
           </section>
