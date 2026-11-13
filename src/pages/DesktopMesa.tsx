@@ -43,6 +43,7 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
     copied,
     handleShare,
     sharing,
+    newMesa,
   } = mesa;
 
   const shared = kind === "shared";
@@ -223,6 +224,17 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
           <div className="flex items-baseline justify-between gap-3">
             <h2 className="text-[26px] font-bold tracking-[-0.03em]">Quién puso qué</h2>
 
+            {newMesa && (
+              <button
+                type="button"
+                onClick={newMesa.start}
+                disabled={newMesa.busy}
+                className="text-sm font-semibold text-faint transition-colors duration-150 hover:text-ink disabled:cursor-wait"
+              >
+                {newMesa.busy ? "Armando la mesa…" : "Nueva mesa"}
+              </button>
+            )}
+
             {count > 0 &&
               !shared &&
               (confirmingReset ? (
@@ -245,6 +257,12 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
                 </button>
               ))}
           </div>
+
+          {newMesa?.error && (
+            <span role="alert" className="text-sm font-semibold text-danger">
+              {newMesa.error}
+            </span>
+          )}
 
           {count === 0 && (
             <p className="rounded-[18px] bg-ground p-7 text-center text-muted">
