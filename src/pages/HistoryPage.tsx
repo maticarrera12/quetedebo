@@ -110,7 +110,7 @@ const MobileHistory = ({ calculations }: { calculations: TransactionResult[] }) 
       <section className="mt-2 flex flex-col items-start gap-3 rounded-3xl border-2 border-dashed border-[#d9cbb2] p-6">
         <h2 className="text-xl font-bold tracking-[-0.02em]">Todavía no hay juntadas</h2>
 
-        <p className="text-muted">Sumá a tus amigos a la mesa, mirá quién le pasa a quién y guardala: queda acá.</p>
+        <p className="text-muted">Sumá a tus amigos a la mesa: en cuanto haya pagos para hacer, la juntada queda acá sola.</p>
 
         <Link to="/" className="flex h-12 items-center rounded-2xl bg-ink px-5 text-base font-bold text-ground">
           Armar una juntada
@@ -179,7 +179,7 @@ const HistoryPage = () => {
         </h1>
 
         <p className="max-w-[40ch] text-xl text-pretty text-muted">
-          Cada vez que guardás una juntada queda acá, en este navegador.
+          Cada juntada con pagos se guarda sola acá, en este navegador, y se actualiza si alguien se suma.
         </p>
       </section>
 
@@ -188,7 +188,7 @@ const HistoryPage = () => {
           <h2 className="text-[26px] font-bold tracking-[-0.03em]">Todavía no hay juntadas</h2>
 
           <p className="max-w-md text-muted">
-            Sentá a tus amigos a la mesa, mirá quién le pasa a quién y guardala: queda acá.
+            Sentá a tus amigos a la mesa: en cuanto haya pagos para hacer, la juntada queda acá sola.
           </p>
 
           <Link

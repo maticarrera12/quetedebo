@@ -1,6 +1,5 @@
 import type { Friend } from "../types/types";
 import { formatName } from "../utils/format";
-import { saveToHistory } from "../utils/history";
 import { isFriendList } from "../utils/storage";
 import { usePersistedState } from "./usePersistedState";
 
@@ -13,7 +12,6 @@ interface UseCalculate {
   updateFriend: (index: number, name: string, expense: number, concept?: string) => void;
   deleteFriend: (index: number) => void;
   reset: () => void;
-  calculateTransactions: (eventName?: string) => void;
 }
 
 export const useCalculate = (): UseCalculate => {
@@ -42,16 +40,11 @@ export const useCalculate = (): UseCalculate => {
     setFriends([]);
   };
 
-  const calculateTransactions = (eventName?: string) => {
-    saveToHistory(friends, eventName);
-  };
-
   return {
     friends,
     addFriend,
     updateFriend,
     deleteFriend,
     reset,
-    calculateTransactions,
   };
 };

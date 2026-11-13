@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { useCalculate } from "./useCalculate";
@@ -48,8 +48,6 @@ export interface Mesa {
   confirmingReset: boolean;
   setConfirmingReset: Dispatch<SetStateAction<boolean>>;
   handleReset: () => void;
-  isSaved: boolean;
-  handleSave: () => void;
   copied: boolean;
   handleShare: () => void;
   // Turning the local mesa into a shared one; null when sharing is not configured or not offered.
@@ -78,18 +76,35 @@ export const useMesaSummary = (friends: Friend[], paid: Record<string, boolean>)
   return { count, total, perPerson, biggest, settlements, settledCount };
 };
 
-// "Guardar en el historial", remembering what was saved so the button is not pressed twice.
-export const useHistorySave = (friends: Friend[], eventName: string) => {
-  const [savedFor, setSavedFor] = useState<string | null>(null);
-  const signature = signatureOf(friends);
+const AUTO_SAVE_DELAY_MS = 400;
 
-  const handleSave = () => {
-    saveToHistory(friends, eventName.trim() || undefined);
-    setSavedFor(signature);
-  };
+// Keeps the mesa in this device's history without a button: its entry appears with the first
+// split and is updated whenever someone joins, changes or leaves, or the name changes. Waits a
+// moment so typing the name does not write on every key, and skips writes when nothing changed.
+export const useAutoHistory = (friends: Friend[], eventName: string, mesaId: string | null) => {
+  const name = eventName.trim();
+  const signature = `${signatureOf(friends)}#${name}`;
+  const lastSaved = useRef<string | null>(null);
 
-  return { isSaved: savedFor === signature, handleSave, clearSaved: () => setSavedFor(null) };
+  useEffect(() => {
+    if (!mesaId || signature === lastSaved.current) return;
+
+    const timer = setTimeout(() => {
+      if (saveToHistory(friends, name || undefined, mesaId)) lastSaved.current = signature;
+    }, AUTO_SAVE_DELAY_MS);
+
+    return () => clearTimeout(timer);
+  }, [friends, name, mesaId, signature]);
 };
+
+// randomUUID only exists on https and localhost; a phone opening the dev server over the local
+// network gets the fallback. The id only has to be unique within this device's history.
+const newLocalMesaId = () =>
+  `local-${
+    typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`
+  }`;
 
 export const useMesa = (): Mesa => {
   const { friends, addFriend, updateFriend, deleteFriend, reset } = useCalculate();
@@ -98,6 +113,10 @@ export const useMesa = (): Mesa => {
 
   // Keyed by who pays whom and how much, so a changed amount is never shown as already paid.
   const [paid, setPaid] = usePersistedState<Record<string, boolean>>("quetedebo:draft:paid", {}, isBooleanMap);
+
+  // Identifies this local mesa in the history; a new one starts when the mesa is cleared.
+  const [firstMesaId] = useState<string>(newLocalMesaId);
+  const [mesaId, setMesaId] = usePersistedState<string>("quetedebo:draft:id", firstMesaId, isString);
 
   const [confirmingReset, setConfirmingReset] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
@@ -108,7 +127,7 @@ export const useMesa = (): Mesa => {
   );
 
   const summary = useMesaSummary(friends, paid);
-  const { isSaved, handleSave, clearSaved } = useHistorySave(friends, eventName);
+  useAutoHistory(friends, eventName, mesaId);
 
   const togglePaid = (key: string) => setPaid((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -124,7 +143,7 @@ export const useMesa = (): Mesa => {
     form.cancelEdit();
     setPaid({});
     setEventName("");
-    clearSaved();
+    setMesaId(newLocalMesaId());
     setConfirmingReset(false);
   };
 
@@ -162,8 +181,6 @@ export const useMesa = (): Mesa => {
     confirmingReset,
     setConfirmingReset,
     handleReset,
-    isSaved,
-    handleSave,
     copied,
     handleShare,
     // Uploads this mesa (name and everyone sitting) as a shared one; the local mesa stays as it was.

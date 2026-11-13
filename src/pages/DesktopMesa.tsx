@@ -38,8 +38,6 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
     confirmingReset,
     setConfirmingReset,
     handleReset,
-    isSaved,
-    handleSave,
     copied,
     handleShare,
     sharing,
@@ -383,14 +381,7 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
                 </button>
               )}
 
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={isSaved}
-                className="rounded-[14px] border-[1.5px] border-muted px-5 py-3 text-[15px] font-bold text-ground transition-colors duration-150 hover:border-ground disabled:cursor-default disabled:border-transparent disabled:text-panel-faint"
-              >
-                {isSaved ? "Guardada en el historial" : "Guardar en el historial"}
-              </button>
+              <p className="text-center text-sm text-panel-faint">Se guarda sola en el historial.</p>
             </div>
           )}
         </div>

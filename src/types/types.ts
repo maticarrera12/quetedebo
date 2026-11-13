@@ -11,4 +11,6 @@ export interface TransactionResult{
     transactions: string[];
     date: string;
     eventName?: string;
+    // The mesa this entry belongs to, so it is updated instead of duplicated. Older entries have none.
+    mesaId?: string;
 }
