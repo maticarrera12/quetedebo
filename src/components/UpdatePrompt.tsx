@@ -1,10 +1,17 @@
+import { useEffect, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
+
+import { detectStandalone } from "../utils/install";
 
 const HOUR = 60 * 60 * 1000;
 
-// A new version is installed in the background and waits, so the page never reloads under
-// someone who is in the middle of typing; it only reloads when the person says so.
+// A new version never reloads the page under someone who is typing.
+// - Installed app: it waits and the person decides when, through this notice.
+// - Browser tab: it takes over silently and shows up on the next reload or visit, like any
+//   website. A module this tab still needs from the old version is handled by staleChunk.ts.
 const UpdatePrompt = () => {
+  const [standalone] = useState<boolean>(detectStandalone);
+
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
@@ -13,9 +20,21 @@ const UpdatePrompt = () => {
       // Installed apps stay open for days; look for a new version every hour.
       if (registration) setInterval(() => registration.update(), HOUR);
     },
+    // Called when the new version takes control. Only the installed app, where the person
+    // asked for it, reloads; a browser tab keeps running until it is reloaded.
+    onNeedReload() {
+      if (detectStandalone()) window.location.reload();
+    },
   });
 
-  if (!needRefresh) return null;
+  useEffect(() => {
+    if (!needRefresh || standalone) return;
+
+    setNeedRefresh(false);
+    void updateServiceWorker();
+  }, [needRefresh, standalone, setNeedRefresh, updateServiceWorker]);
+
+  if (!needRefresh || !standalone) return null;
 
   return (
     <div
