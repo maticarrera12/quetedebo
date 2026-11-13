@@ -11,6 +11,7 @@ import { useIsMobile } from "./hooks/useMediaQuery"
 import { CalculatePage } from "./pages/CalculatePage"
 import HistoryPage from "./pages/HistoryPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import SharedMesaPage from "./pages/SharedMesaPage";
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
               }
             />
           ))}
+          <Route path="/m/:id" element={<SharedMesaPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

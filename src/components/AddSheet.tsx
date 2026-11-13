@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 
 import type { AddFriendForm } from "../hooks/useAddFriendForm";
+import { CONCEPT_MAX_LENGTH, NAME_MAX_LENGTH } from "../hooks/useAddFriendForm";
 import { CONCEPT_CHIPS } from "../utils/concepts";
 
 interface AddSheetProps {
@@ -40,10 +41,16 @@ const AddSheet = ({ open, onClose, form }: AddSheetProps) => {
     onClose();
   };
 
+  const editing = form.editing !== null;
+
   const submit = (e: FormEvent<HTMLFormElement>) => {
     const added = form.name.trim();
 
-    if (form.submit(e)) setNotice(`${added} ya está en la mesa`);
+    if (!form.submit(e)) return;
+
+    // An edit is a single change, so the sheet closes; adding stays open for the next friend.
+    if (editing) close();
+    else setNotice(`${added} ya está en la mesa`);
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
@@ -65,7 +72,7 @@ const AddSheet = ({ open, onClose, form }: AddSheetProps) => {
 
         <div className="mb-2 flex h-11 items-center justify-between">
           <h2 id="sheet-title" className="text-[22px] font-extrabold tracking-[-0.02em]">
-            Sumar a la mesa
+            {editing ? "Cambiar los datos" : "Sumar a la mesa"}
           </h2>
 
           <button
@@ -90,6 +97,7 @@ const AddSheet = ({ open, onClose, form }: AddSheetProps) => {
               autoFocus
               autoComplete="off"
               enterKeyHint="next"
+              maxLength={NAME_MAX_LENGTH}
               placeholder="Por ejemplo, Lucía"
               aria-invalid={Boolean(form.error)}
               aria-describedby={form.error ? "sheet-error" : undefined}
@@ -104,6 +112,7 @@ const AddSheet = ({ open, onClose, form }: AddSheetProps) => {
               onChange={(e) => form.setConcept(e.target.value)}
               autoComplete="off"
               enterKeyHint="next"
+              maxLength={CONCEPT_MAX_LENGTH}
               placeholder="La carne, el vino…"
               className={fieldClass}
             />
@@ -157,11 +166,11 @@ const AddSheet = ({ open, onClose, form }: AddSheetProps) => {
               onClick={close}
               className="h-14 flex-none rounded-2xl border-[1.5px] border-field-line px-[22px] text-base font-bold text-ink"
             >
-              Listo
+              {editing ? "Cancelar" : "Listo"}
             </button>
 
             <button type="submit" className="h-14 flex-1 rounded-2xl bg-ink text-[17px] font-bold text-ground">
-              Sumar a la mesa
+              {editing ? "Guardar cambios" : "Sumar a la mesa"}
             </button>
           </div>
         </form>

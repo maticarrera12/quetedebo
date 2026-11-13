@@ -1,14 +1,23 @@
 import { useRef, useState } from "react";
 import type { FormEvent } from "react";
-import { parseAmount } from "../utils/format";
+import type { Friend } from "../types/types";
+import { amountInput, parseAmount } from "../utils/format";
+
+// The longest name and concept a shared mesa accepts (see the checks in supabase/migrations).
+export const NAME_MAX_LENGTH = 40;
+export const CONCEPT_MAX_LENGTH = 60;
 
 // The state and rules of "sit a friend at the table", shared by the inline form on desktop and
-// the sheet on phones, so both accept exactly the same input.
-export const useAddFriendForm = (onAdd: (name: string, amount: number, concept: string) => void) => {
+// the sheet on phones, so both accept exactly the same input. The same form edits someone who is
+// already sitting: `editing` holds their position until the change is saved or cancelled.
+export const useAddFriendForm = (
+  onSubmit: (name: string, amount: number, concept: string, editing: number | null) => void
+) => {
   const [name, setName] = useState<string>("");
   const [concept, setConcept] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [editing, setEditing] = useState<number | null>(null);
 
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -19,7 +28,26 @@ export const useAddFriendForm = (onAdd: (name: string, amount: number, concept: 
 
   const changeAmount = (value: string) => setAmount(value.replace(/[^\d.,]/g, ""));
 
-  // Returns whether somebody was added, so a caller can react (a notice, closing a sheet).
+  const clear = () => {
+    setName("");
+    setConcept("");
+    setAmount("");
+    setError("");
+    setEditing(null);
+  };
+
+  const startEdit = (index: number, friend: Friend) => {
+    setName(friend.name);
+    setConcept(friend.concept ?? "");
+    setAmount(amountInput(friend.expense));
+    setError("");
+    setEditing(index);
+    nameRef.current?.focus();
+  };
+
+  const cancelEdit = () => clear();
+
+  // Returns whether somebody was added or changed, so a caller can react (a notice, closing a sheet).
   const submit = (e?: FormEvent): boolean => {
     e?.preventDefault();
 
@@ -29,18 +57,28 @@ export const useAddFriendForm = (onAdd: (name: string, amount: number, concept: 
       return false;
     }
 
-    onAdd(name.trim(), parseAmount(amount), concept.trim());
+    onSubmit(name.trim(), parseAmount(amount), concept.trim(), editing);
 
-    setName("");
-    setConcept("");
-    setAmount("");
-    setError("");
+    clear();
     nameRef.current?.focus();
 
     return true;
   };
 
-  return { name, concept, amount, error, nameRef, changeName, setConcept, changeAmount, submit };
+  return {
+    name,
+    concept,
+    amount,
+    error,
+    editing,
+    nameRef,
+    changeName,
+    setConcept,
+    changeAmount,
+    startEdit,
+    cancelEdit,
+    submit,
+  };
 };
 
 export type AddFriendForm = ReturnType<typeof useAddFriendForm>;

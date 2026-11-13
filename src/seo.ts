@@ -7,7 +7,7 @@ export interface PrerenderRoute {
   title: string;
   description: string;
   // Written to this file instead of <path>/index.html, and kept out of search results.
-  errorFile?: string;
+  file?: string;
 }
 
 // Pages written to disk as static HTML at build time, so search engines read the text without
@@ -23,7 +23,15 @@ export const PRERENDER_ROUTES: PrerenderRoute[] = [
     path: "/404",
     title: "Página no encontrada | ¿Qué te debo?",
     description: "Esta página no existe. Volvé al inicio para dividir los gastos con tus amigos.",
-    errorFile: "404.html",
+    file: "404.html",
+  },
+  {
+    // The shell every shared mesa link (/m/<id>) is served from: vercel.json rewrites to it, so
+    // the preview a chat app shows for the link invites people in instead of saying "not found".
+    path: "/m/mesa",
+    title: "Te invitaron a una mesa | ¿Qué te debo?",
+    description: "Sumá lo que pusiste en la juntada y mirá quién le pasa cuánto a quién.",
+    file: "mesa.html",
   },
   ...INTENT_PAGES.map(({ path, title, description }) => ({ path, title, description })),
 ];

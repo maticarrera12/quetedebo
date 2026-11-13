@@ -13,14 +13,18 @@ const BottomNav = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const openSheet = () => navigate("/", { replace: pathname === "/", state: { sumar: Date.now() } });
+  // On a shared mesa, Sumar adds to that mesa; everywhere else it goes to the local one.
+  const onSharedMesa = pathname.startsWith("/m/");
+  const mesaPath = onSharedMesa ? pathname : "/";
+
+  const openSheet = () => navigate(mesaPath, { replace: pathname === mesaPath, state: { sumar: Date.now() } });
 
   return (
     <nav
       aria-label="Principal"
       className="fixed inset-x-0 bottom-0 z-20 flex h-[calc(84px+env(safe-area-inset-bottom))] items-start border-t border-line bg-surface px-4 pt-2.5 pb-[env(safe-area-inset-bottom)]"
     >
-      <NavLink to="/" end className={tabClass}>
+      <NavLink to="/" end className={({ isActive }) => tabClass({ isActive: isActive || onSharedMesa })}>
         <svg {...icon}>
           <circle cx="12" cy="12" r="6" />
           <circle cx="12" cy="3.5" r="1.6" />

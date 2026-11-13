@@ -27,14 +27,14 @@ try {
       .replace(/(<meta\s+name="description"\s+content=")[^"]*"/, `$1${description}"`)
       .replace(
         /<link rel="canonical" href="[^"]*" \/>/,
-        route.errorFile ? '<meta name="robots" content="noindex" />' : `<link rel="canonical" href="${url}" />`
+        route.file ? '<meta name="robots" content="noindex" />' : `<link rel="canonical" href="${url}" />`
       )
       .replace(/(<meta property="og:title" content=")[^"]*"/, `$1${title}"`)
       .replace(/(<meta name="twitter:title" content=")[^"]*"/, `$1${title}"`)
       .replace(/(<meta property="og:url" content=")[^"]*"/, `$1${url}"`);
 
-    const file = route.errorFile
-      ? join(dist, route.errorFile)
+    const file = route.file
+      ? join(dist, route.file)
       : route.path === "/"
         ? join(dist, "index.html")
         : join(dist, route.path, "index.html");
