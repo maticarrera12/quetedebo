@@ -25,3 +25,6 @@ dist-ssr
 
 # taste-skill inspector reports
 .taste-skill/
+
+# Local environment (Supabase keys)
+.env
