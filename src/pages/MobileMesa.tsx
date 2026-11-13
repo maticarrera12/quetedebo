@@ -20,10 +20,17 @@ const PlusIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const PencilIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 20h4L18.5 9.5a2.1 2.1 0 00-4-4L4 16v4z" />
+  </svg>
+);
+
 // The phone version of the table: a compact table that never leaves the screen, two tabs for
 // what you need to read, and everything that adds data lives in a sheet (AddSheet).
 const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
   const {
+    kind,
     friends,
     count,
     total,
@@ -36,6 +43,7 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
     eventName,
     setEventName,
     form,
+    startEdit,
     deleteFriend,
     confirmingReset,
     setConfirmingReset,
@@ -44,7 +52,10 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
     handleSave,
     copied,
     handleShare,
+    sharing,
   } = mesa;
+
+  const shared = kind === "shared";
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -66,7 +77,36 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
     }
   }, [location, navigate]);
 
-  const sheet = <AddSheet open={sheetOpen} onClose={() => setSheetOpen(false)} form={form} />;
+  const closeSheet = () => {
+    if (form.editing !== null) form.cancelEdit();
+    setSheetOpen(false);
+  };
+
+  const edit = (index: number) => {
+    startEdit(index);
+    setSheetOpen(true);
+  };
+
+  const sheet = <AddSheet open={sheetOpen} onClose={closeSheet} form={form} />;
+
+  const startSharingButton = sharing && (
+    <div className="mt-3 flex flex-col items-center gap-1">
+      <button
+        type="button"
+        onClick={sharing.start}
+        disabled={sharing.busy}
+        className="flex min-h-11 items-center justify-center rounded-full border-[1.5px] border-ink px-5 text-[15px] font-bold text-ink disabled:opacity-60"
+      >
+        {sharing.busy ? "Armando la mesa…" : "Compartir la mesa con el grupo"}
+      </button>
+
+      {sharing.error && (
+        <span role="alert" className="text-center text-sm font-semibold text-danger">
+          {sharing.error}
+        </span>
+      )}
+    </div>
+  );
 
   if (count === 0) {
     return (
@@ -103,10 +143,26 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
             className="mt-6 flex h-14 w-full items-center justify-center gap-2.5 rounded-2xl bg-ink text-[17px] font-bold text-ground"
           >
             <PlusIcon className="text-honey" />
-            Sumar al primero
+            {shared ? "Sumarme a la mesa" : "Sumar al primero"}
           </button>
 
-          <p className="mt-4 text-center text-[13px] text-muted">Tu mesa se guarda sola en este celular.</p>
+          {shared ? (
+            <button
+              type="button"
+              onClick={handleShare}
+              className="mt-3 flex min-h-11 w-full items-center justify-center rounded-2xl border-[1.5px] border-ink text-[15px] font-bold text-ink"
+            >
+              {copied ? "¡Link copiado!" : "Mandar el link al grupo"}
+            </button>
+          ) : (
+            startSharingButton
+          )}
+
+          <p className="mt-4 text-center text-[13px] text-muted">
+            {shared
+              ? "Todos los que tengan el link ven esta mesa y pueden sumar lo suyo."
+              : "Tu mesa se guarda sola en este celular."}
+          </p>
         </div>
 
         {sheet}
@@ -139,7 +195,7 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
           <button
             type="button"
             onClick={handleShare}
-            aria-label="Copiar resumen para el grupo"
+            aria-label={shared ? "Mandar el link de la mesa" : "Copiar resumen para el grupo"}
             className="flex h-11 w-11 flex-none items-center justify-center rounded-full border border-line bg-surface text-ink"
           >
             {copied ? (
@@ -154,13 +210,15 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
           </button>
 
           <span role="status" className="sr-only">
-            {copied ? "Resumen copiado" : ""}
+            {copied ? (shared ? "Link copiado" : "Resumen copiado") : ""}
           </span>
         </header>
 
         <div className="pt-1">
           <RoundTable compact friends={friends} total={total} />
         </div>
+
+        {!shared && startSharingButton}
 
         <div role="tablist" aria-label="Vista de la mesa" className="mx-4 mt-3 flex gap-1 rounded-full bg-[#efe6d3] p-1">
           <button
@@ -266,6 +324,15 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
 
                     <button
                       type="button"
+                      onClick={() => edit(index)}
+                      aria-label={`Cambiar los datos de ${friend.name}`}
+                      className="-mr-1 flex h-11 w-9 flex-none items-center justify-center rounded-full text-muted"
+                    >
+                      <PencilIcon />
+                    </button>
+
+                    <button
+                      type="button"
                       onClick={() => deleteFriend(index)}
                       aria-label={`Sacar a ${friend.name} de la mesa`}
                       className="-mr-2 flex h-11 w-9 flex-none items-center justify-center rounded-full text-lg text-muted"
@@ -278,7 +345,7 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
             </ul>
 
             <div className="mt-1 flex min-h-11 items-center justify-center">
-              {confirmingReset ? (
+              {shared ? null : confirmingReset ? (
                 <span className="flex items-center gap-4 text-sm font-semibold">
                   ¿Levantar a {count}?
                   <button type="button" onClick={handleReset} className="min-h-11 px-2 text-danger">

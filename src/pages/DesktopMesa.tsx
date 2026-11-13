@@ -7,12 +7,20 @@ import type { Mesa } from "../hooks/useMesa";
 
 import { money, personColor } from "../utils/format";
 import { CONCEPT_CHIPS } from "../utils/concepts";
+import { CONCEPT_MAX_LENGTH, NAME_MAX_LENGTH } from "../hooks/useAddFriendForm";
 
 const fieldClass =
   "rounded-[14px] border-[1.5px] border-field-line bg-ground px-4 py-3.5 text-lg font-medium text-ink placeholder:text-faint focus:border-accent-deep focus:bg-surface";
 
+const PencilIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 20h4L18.5 9.5a2.1 2.1 0 00-4-4L4 16v4z" />
+  </svg>
+);
+
 const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
   const {
+    kind,
     friends,
     count,
     total,
@@ -25,6 +33,7 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
     eventName,
     setEventName,
     form,
+    startEdit,
     deleteFriend,
     confirmingReset,
     setConfirmingReset,
@@ -33,7 +42,15 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
     handleSave,
     copied,
     handleShare,
+    sharing,
   } = mesa;
+
+  const shared = kind === "shared";
+
+  const edit = (index: number) => {
+    startEdit(index);
+    form.nameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
 
   return (
     <>
@@ -53,9 +70,47 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
           </h1>
 
           <p className="max-w-[30ch] text-xl text-pretty text-muted">
-            Cada uno anota lo que trajo a la juntada. Nosotros hacemos la cuenta para que nadie
-            tenga que sacar la calculadora en la sobremesa.
+            {shared
+              ? "Mesa compartida: todos los que tengan el link la ven y suman lo que pusieron."
+              : "Cada uno anota lo que trajo a la juntada. Nosotros hacemos la cuenta para que nadie tenga que sacar la calculadora en la sobremesa."}
           </p>
+
+          {shared ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={handleShare}
+                className="rounded-[14px] bg-honey px-5 py-3.5 text-base font-bold text-ink transition-colors duration-150 hover:bg-honey-soft"
+              >
+                Mandar el link al grupo
+              </button>
+
+              <span role="status" className="text-sm font-semibold text-good">
+                {copied ? "¡Link copiado! Pegalo en el grupo" : ""}
+              </span>
+            </div>
+          ) : (
+            sharing && (
+              <div className="flex flex-col items-start gap-2">
+                <button
+                  type="button"
+                  onClick={sharing.start}
+                  disabled={sharing.busy}
+                  className="rounded-[14px] border-[1.5px] border-ink px-5 py-3 text-base font-bold text-ink transition-colors duration-150 hover:bg-ink hover:text-ground disabled:cursor-wait disabled:opacity-60"
+                >
+                  {sharing.busy ? "Armando la mesa…" : "Compartir la mesa con el grupo"}
+                </button>
+
+                <span className="text-sm text-muted">Mandá el link y que cada uno sume lo suyo.</span>
+
+                {sharing.error && (
+                  <span role="alert" className="text-sm font-semibold text-danger">
+                    {sharing.error}
+                  </span>
+                )}
+              </div>
+            )
+          )}
         </div>
 
         <RoundTable friends={friends} total={total} />
@@ -66,7 +121,9 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
         className="flex flex-col gap-5 rounded-[28px] border border-line bg-surface p-5 sm:p-7"
       >
         <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <h2 className="text-[26px] font-bold tracking-[-0.03em]">¿Quién se suma a la mesa?</h2>
+          <h2 className="text-[26px] font-bold tracking-[-0.03em]">
+            {form.editing !== null ? "Cambiar los datos" : "¿Quién se suma a la mesa?"}
+          </h2>
 
           <span className="text-[15px] text-faint">
             {count
@@ -83,6 +140,7 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
               value={form.name}
               onChange={(e) => form.changeName(e.target.value)}
               autoComplete="off"
+              maxLength={NAME_MAX_LENGTH}
               placeholder="Por ejemplo, Lucía"
               aria-invalid={Boolean(form.error)}
               aria-describedby={form.error ? "form-error" : undefined}
@@ -96,6 +154,7 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
               value={form.concept}
               onChange={(e) => form.setConcept(e.target.value)}
               autoComplete="off"
+              maxLength={CONCEPT_MAX_LENGTH}
               placeholder="La carne, el vino…"
               className={fieldClass}
             />
@@ -119,12 +178,24 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
             </span>
           </label>
 
-          <button
-            type="submit"
-            className="rounded-[14px] bg-ink px-5 py-[15px] text-[17px] font-bold whitespace-nowrap text-ground transition-[background-color,transform] duration-150 hover:bg-accent-deep active:scale-[0.97]"
-          >
-            Sentar a la mesa
-          </button>
+          <div className="flex gap-2">
+            {form.editing !== null && (
+              <button
+                type="button"
+                onClick={form.cancelEdit}
+                className="rounded-[14px] border-[1.5px] border-field-line px-4 py-[15px] text-base font-bold whitespace-nowrap text-ink"
+              >
+                Cancelar
+              </button>
+            )}
+
+            <button
+              type="submit"
+              className="flex-1 rounded-[14px] bg-ink px-5 py-[15px] text-[17px] font-bold whitespace-nowrap text-ground transition-[background-color,transform] duration-150 hover:bg-accent-deep active:scale-[0.97]"
+            >
+              {form.editing !== null ? "Guardar cambios" : "Sentar a la mesa"}
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -153,6 +224,7 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
             <h2 className="text-[26px] font-bold tracking-[-0.03em]">Quién puso qué</h2>
 
             {count > 0 &&
+              !shared &&
               (confirmingReset ? (
                 <span className="flex items-center gap-3 text-sm font-semibold">
                   ¿Levantar a {count}?
@@ -189,7 +261,7 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
               return (
                 <li
                   key={index}
-                  className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-3.5 border-t border-track py-3.5 first:border-t-0"
+                  className="grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-3.5 border-t border-track py-3.5 first:border-t-0"
                 >
                   <Avatar name={friend.name} color={color} size={44} />
 
@@ -219,6 +291,16 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
                       {even ? "justo" : diff > 0 ? `le deben ${money(diff)}` : `debe ${money(-diff)}`}
                     </span>
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={() => edit(index)}
+                    aria-label={`Cambiar los datos de ${friend.name}`}
+                    title="Cambiar los datos"
+                    className="flex h-[30px] w-[30px] items-center justify-center rounded-full text-faint transition-colors duration-150 hover:bg-ground hover:text-ink"
+                  >
+                    <PencilIcon />
+                  </button>
 
                   <button
                     type="button"
@@ -273,13 +355,15 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
 
           {settlements.length > 0 && (
             <div className="mt-auto flex flex-col gap-2.5 pt-1">
-              <button
-                type="button"
-                onClick={handleShare}
-                className="rounded-[14px] bg-honey px-5 py-[15px] text-base font-bold text-ink transition-colors duration-150 hover:bg-honey-soft"
-              >
-                {copied ? "¡Copiado! Pegalo en el grupo" : "Copiar resumen para el grupo"}
-              </button>
+              {!shared && (
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="rounded-[14px] bg-honey px-5 py-[15px] text-base font-bold text-ink transition-colors duration-150 hover:bg-honey-soft"
+                >
+                  {copied ? "¡Copiado! Pegalo en el grupo" : "Copiar resumen para el grupo"}
+                </button>
+              )}
 
               <button
                 type="button"
