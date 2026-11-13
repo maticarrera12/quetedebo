@@ -38,9 +38,11 @@ const readDismissed = (): boolean => {
   }
 };
 
-const detectStandalone = (): boolean =>
-  window.matchMedia("(display-mode: standalone)").matches ||
-  (navigator as Navigator & { standalone?: boolean }).standalone === true;
+// False while prerendering, where there is no window.
+export const detectStandalone = (): boolean =>
+  typeof window !== "undefined" &&
+  (window.matchMedia("(display-mode: standalone)").matches ||
+    (navigator as Navigator & { standalone?: boolean }).standalone === true);
 
 let state: InstallState = {
   deferred: null,
