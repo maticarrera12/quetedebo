@@ -9,7 +9,7 @@ import { usePersistedState } from "./usePersistedState";
 
 import type { Friend } from "../types/types";
 import { calculateSettlements } from "../utils/calculateSettlements";
-import { money, parseSettlement } from "../utils/format";
+import { parseSettlement, summaryText } from "../utils/format";
 import type { Settlement } from "../utils/format";
 import { saveToHistory } from "../utils/history";
 import { isBooleanMap, isString } from "../utils/storage";
@@ -50,6 +50,9 @@ export interface Mesa {
   handleReset: () => void;
   copied: boolean;
   handleShare: () => void;
+  // Copying who pays whom to paste in the group; on the local mesa it is the same as handleShare.
+  summaryCopied: boolean;
+  copySummary: () => void;
   // Turning the local mesa into a shared one; null when sharing is not configured or not offered.
   sharing: MesaAction | null;
   // Starting a new, empty shared mesa from a shared one; null on the local mesa.
@@ -74,6 +77,26 @@ export const useMesaSummary = (friends: Friend[], paid: Record<string, boolean>)
   const settledCount = settlements.filter((settlement) => paid[settlementKey(settlement)]).length;
 
   return { count, total, perPerson, biggest, settlements, settledCount };
+};
+
+// Copies the summary for the group chat and says so for a moment.
+export const useCopySummary = (
+  eventName: string,
+  summary: Pick<ReturnType<typeof useMesaSummary>, "total" | "perPerson" | "settlements">
+) => {
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(summaryText(eventName, summary.total, summary.perPerson, summary.settlements));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return { copied, copy };
 };
 
 const AUTO_SAVE_DELAY_MS = 400;
@@ -119,7 +142,6 @@ export const useMesa = (): Mesa => {
   const [mesaId, setMesaId] = usePersistedState<string>("quetedebo:draft:id", firstMesaId, isString);
 
   const [confirmingReset, setConfirmingReset] = useState<boolean>(false);
-  const [copied, setCopied] = useState<boolean>(false);
   const goLive = useCreateSharedMesa();
 
   const form = useAddFriendForm((name, amount, concept, editing) =>
@@ -127,6 +149,7 @@ export const useMesa = (): Mesa => {
   );
 
   const summary = useMesaSummary(friends, paid);
+  const summaryCopy = useCopySummary(eventName, summary);
   useAutoHistory(friends, eventName, mesaId);
 
   const togglePaid = (key: string) => setPaid((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -147,26 +170,6 @@ export const useMesa = (): Mesa => {
     setConfirmingReset(false);
   };
 
-  const handleShare = async () => {
-    const title = eventName.trim() || "La juntada";
-
-    const summaryText =
-      `${title} — total ${money(summary.total)}, ${money(summary.perPerson)} cada uno\n` +
-      summary.settlements
-        .map((settlement) => `• ${settlement.from} → ${settlement.to}: ${money(settlement.amount)}`)
-        .join("\n");
-
-    try {
-      await navigator.clipboard.writeText(summaryText);
-
-      setCopied(true);
-
-      setTimeout(() => setCopied(false), 2200);
-    } catch {
-      setCopied(false);
-    }
-  };
-
   return {
     kind: "local",
     friends,
@@ -181,8 +184,11 @@ export const useMesa = (): Mesa => {
     confirmingReset,
     setConfirmingReset,
     handleReset,
-    copied,
-    handleShare,
+    // On the local mesa, sharing is copying the summary: there is no link to send.
+    copied: summaryCopy.copied,
+    handleShare: summaryCopy.copy,
+    summaryCopied: summaryCopy.copied,
+    copySummary: summaryCopy.copy,
     // Uploads this mesa (name and everyone sitting) as a shared one; the local mesa stays as it was.
     sharing: isSharingConfigured()
       ? { start: () => void goLive.create(eventName.trim(), friends), busy: goLive.busy, error: goLive.error }

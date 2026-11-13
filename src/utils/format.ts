@@ -40,3 +40,8 @@ export const parseSettlement = (text: string): Settlement | null => {
   if (!match) return null;
   return { from: match[1], amount: Number(match[2]), to: match[3] };
 };
+
+// The text pasted in the group chat: the mesa's numbers and who pays whom.
+export const summaryText = (eventName: string, total: number, perPerson: number, settlements: Settlement[]): string =>
+  `${eventName.trim() || "La juntada"} — total ${money(total)}, ${money(perPerson)} cada uno\n` +
+  settlements.map((settlement) => `• ${settlement.from} → ${settlement.to}: ${money(settlement.amount)}`).join("\n");

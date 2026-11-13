@@ -40,6 +40,8 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
     handleReset,
     copied,
     handleShare,
+    summaryCopied,
+    copySummary,
     sharing,
     newMesa,
   } = mesa;
@@ -371,15 +373,13 @@ const DesktopMesa = ({ mesa }: { mesa: Mesa }) => {
 
           {settlements.length > 0 && (
             <div className="mt-auto flex flex-col gap-2.5 pt-1">
-              {!shared && (
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  className="rounded-[14px] bg-honey px-5 py-[15px] text-base font-bold text-ink transition-colors duration-150 hover:bg-honey-soft"
-                >
-                  {copied ? "¡Copiado! Pegalo en el grupo" : "Copiar resumen para el grupo"}
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={copySummary}
+                className="rounded-[14px] bg-honey px-5 py-[15px] text-base font-bold text-ink transition-colors duration-150 hover:bg-honey-soft"
+              >
+                {summaryCopied ? "¡Copiado! Pegalo en el grupo" : "Copiar resumen para el grupo"}
+              </button>
 
               <p className="text-center text-sm text-panel-faint">Se guarda sola en el historial.</p>
             </div>
