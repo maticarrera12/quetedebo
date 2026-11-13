@@ -15,7 +15,14 @@ export const initialOf = (name: string): string => name.trim().charAt(0).toUpper
 export const parseAmount = (text: string): number =>
   parseFloat(text.replace(/\./g, "").replace(",", ".")) || 0;
 
-export const personColor = (friends: Friend[], name: string): string => {
+// How a name is shown at the table: "lUCÍA" sits down as "Lucía".
+export const formatName = (name: string): string =>
+  name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+// The inverse of parseAmount, to put an amount back in the field when someone edits it.
+export const amountInput = (amount: number): string => (amount ? String(amount).replace(".", ",") : "");
+
+export const personColor =(friends: Friend[], name: string): string => {
   const index = friends.findIndex((friend) => friend.name === name);
   const slot = friends[index]?.color ?? Math.max(index, 0);
   return `oklch(0.8 0.12 ${HUES[slot % HUES.length]})`;

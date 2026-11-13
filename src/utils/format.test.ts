@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { initialOf, money, parseAmount, parseSettlement, personColor } from "./format";
+import { amountInput, formatName, initialOf, money, parseAmount, parseSettlement, personColor } from "./format";
 
 describe("parseAmount", () => {
   it("reads Argentine formatting: dots for thousands, comma for decimals", () => {
@@ -71,5 +71,24 @@ describe("personColor", () => {
 
   it("falls back to list position for older saved friends", () => {
     expect(personColor(friends, "Caro")).toMatch(/^oklch\(/);
+  });
+});
+
+describe("formatName", () => {
+  it("capitalizes the first letter and lowercases the rest, as the mesa always did", () => {
+    expect(formatName("lUCÍA")).toBe("Lucía");
+    expect(formatName("ana maría")).toBe("Ana maría");
+  });
+});
+
+describe("amountInput", () => {
+  it("writes an amount back the way people type it, so editing never changes it", () => {
+    expect(amountInput(28000)).toBe("28000");
+    expect(amountInput(1200.5)).toBe("1200,5");
+    expect(amountInput(0)).toBe("");
+
+    for (const amount of [28000, 1200.5, 0.99, 1234567.89]) {
+      expect(parseAmount(amountInput(amount))).toBe(amount);
+    }
   });
 });

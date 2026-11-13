@@ -1,6 +1,6 @@
-import { useState } from "react";
-import type { Friend, TransactionResult } from "../types/types";
-import { calculateSettlements, getTotalExpense } from "../utils/calculateSettlements";
+import type { Friend } from "../types/types";
+import { formatName } from "../utils/format";
+import { saveToHistory } from "../utils/history";
 import { isFriendList } from "../utils/storage";
 import { usePersistedState } from "./usePersistedState";
 
@@ -9,8 +9,8 @@ const FRIENDS_KEY = "quetedebo:draft:friends";
 
 interface UseCalculate {
   friends: Friend[];
-  transactions: string[];
-  addFriend: (name: string, expense: string, concept?: string) => void;
+  addFriend: (name: string, expense: number, concept?: string) => void;
+  updateFriend: (index: number, name: string, expense: number, concept?: string) => void;
   deleteFriend: (index: number) => void;
   reset: () => void;
   calculateTransactions: (eventName?: string) => void;
@@ -18,18 +18,20 @@ interface UseCalculate {
 
 export const useCalculate = (): UseCalculate => {
   const [friends, setFriends] = usePersistedState<Friend[]>(FRIENDS_KEY, [], isFriendList);
-  const [transactions, setTransactions] = useState<string[]>([]);
 
-  const addFriend = (name: string, expense: string, concept = "") => {
-    const formattedName =
-      name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-
+  const addFriend = (name: string, expense: number, concept = "") => {
     setFriends((prev) => {
       // Each friend keeps one colour for the whole session, even when others leave.
       const color = prev.length ? Math.max(...prev.map((friend) => friend.color ?? 0)) + 1 : 0;
-      const newFriend: Friend = { name: formattedName, expense: Number(expense), concept, color };
+      const newFriend: Friend = { name: formatName(name), expense, concept, color };
       return [...prev, newFriend];
     });
+  };
+
+  const updateFriend = (index: number, name: string, expense: number, concept = "") => {
+    setFriends((prev) =>
+      prev.map((friend, i) => (i === index ? { ...friend, name: formatName(name), expense, concept } : friend))
+    );
   };
 
   const deleteFriend = (index: number) => {
@@ -38,37 +40,16 @@ export const useCalculate = (): UseCalculate => {
 
   const reset = () => {
     setFriends([]);
-    setTransactions([]);
   };
 
   const calculateTransactions = (eventName?: string) => {
-    const transactionsCalculated = calculateSettlements(friends);
-    if (transactionsCalculated.length === 0) {
-      setTransactions([]);
-      return;
-    }
-
-    const newTransaction: TransactionResult = {
-      friends,
-      totalExpense: getTotalExpense(friends),
-      transactions: transactionsCalculated,
-      date: new Date().toLocaleString(),
-      ...(eventName ? { eventName } : {}),
-    };
-
-    const existing: TransactionResult[] = JSON.parse(
-      localStorage.getItem("calculation") || "[]"
-    );
-    existing.push(newTransaction);
-    localStorage.setItem("calculation", JSON.stringify(existing));
-
-    setTransactions(transactionsCalculated);
+    saveToHistory(friends, eventName);
   };
 
   return {
     friends,
-    transactions,
     addFriend,
+    updateFriend,
     deleteFriend,
     reset,
     calculateTransactions,
