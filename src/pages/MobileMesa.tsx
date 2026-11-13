@@ -50,6 +50,8 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
     handleReset,
     copied,
     handleShare,
+    summaryCopied,
+    copySummary,
     sharing,
     newMesa,
   } = mesa;
@@ -272,6 +274,17 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
                     );
                   })}
                 </ul>
+
+                {/* The header button sends the link on a shared mesa, so the summary gets its own. */}
+                {shared && (
+                  <button
+                    type="button"
+                    onClick={copySummary}
+                    className="mt-3 flex h-12 w-full items-center justify-center rounded-2xl bg-honey text-[15px] font-bold text-ink"
+                  >
+                    {summaryCopied ? "¡Copiado! Pegalo en el grupo" : "Copiar resumen para el grupo"}
+                  </button>
+                )}
 
                 <p className="mt-1 flex min-h-11 w-full items-center justify-center text-center text-sm font-semibold text-muted">
                   {settledCount} de {settlements.length} saldados · Se guarda sola en el historial

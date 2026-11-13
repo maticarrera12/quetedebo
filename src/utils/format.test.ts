@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { amountInput, formatName, initialOf, money, parseAmount, parseSettlement, personColor } from "./format";
+import { amountInput, formatName, initialOf, money, parseAmount, parseSettlement, personColor, summaryText } from "./format";
 
 describe("parseAmount", () => {
   it("reads Argentine formatting: dots for thousands, comma for decimals", () => {
@@ -90,5 +90,22 @@ describe("amountInput", () => {
     for (const amount of [28000, 1200.5, 0.99, 1234567.89]) {
       expect(parseAmount(amountInput(amount))).toBe(amount);
     }
+  });
+});
+
+describe("summaryText", () => {
+  it("lists who pays whom under the title, total and share per person", () => {
+    const text = summaryText("Asado", 30000, 10000, [
+      { from: "Sofía", to: "Lucía", amount: 5000 },
+      { from: "Juan", to: "Lucía", amount: 5000 },
+    ]);
+
+    expect(text).toBe(
+      "Asado — total $30.000,00, $10.000,00 cada uno\n• Sofía → Lucía: $5.000,00\n• Juan → Lucía: $5.000,00"
+    );
+  });
+
+  it("falls back to a default title when the mesa has no name", () => {
+    expect(summaryText("  ", 0, 0, [])).toBe("La juntada — total $0,00, $0,00 cada uno\n");
   });
 });

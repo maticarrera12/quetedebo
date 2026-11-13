@@ -3,7 +3,7 @@ import type { RealtimeChannel } from "@supabase/supabase-js";
 
 import { useAddFriendForm } from "./useAddFriendForm";
 import { useCreateSharedMesa } from "./useCreateSharedMesa";
-import { useAutoHistory, useMesaSummary } from "./useMesa";
+import { useAutoHistory, useCopySummary, useMesaSummary } from "./useMesa";
 import type { Mesa } from "./useMesa";
 import { usePersistedState } from "./usePersistedState";
 
@@ -174,6 +174,7 @@ export const useSharedMesa = (mesaId: string): Mesa & { status: SharedMesaStatus
   const freshMesa = useCreateSharedMesa();
 
   const summary = useMesaSummary(participants, paid);
+  const summaryCopy = useCopySummary(eventName, summary);
   useAutoHistory(participants, eventName, mesaId);
 
   const startEdit = (index: number) => {
@@ -238,6 +239,8 @@ export const useSharedMesa = (mesaId: string): Mesa & { status: SharedMesaStatus
     setConfirmingReset,
     handleReset: () => setConfirmingReset(false),
     copied,
+    summaryCopied: summaryCopy.copied,
+    copySummary: summaryCopy.copy,
     handleShare: () => void handleShare(),
     sharing: null,
     // A new, empty mesa with its own link; this one stays as it is for the group.
