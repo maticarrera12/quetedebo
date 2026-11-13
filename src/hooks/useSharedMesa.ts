@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
 import { useAddFriendForm } from "./useAddFriendForm";
+import { useCreateSharedMesa } from "./useCreateSharedMesa";
 import { useHistorySave, useMesaSummary } from "./useMesa";
 import type { Mesa } from "./useMesa";
 import { usePersistedState } from "./usePersistedState";
@@ -170,6 +171,8 @@ export const useSharedMesa = (mesaId: string): Mesa & { status: SharedMesaStatus
     );
   });
 
+  const freshMesa = useCreateSharedMesa();
+
   const summary = useMesaSummary(participants, paid);
   const { isSaved, handleSave } = useHistorySave(participants, eventName);
 
@@ -239,5 +242,7 @@ export const useSharedMesa = (mesaId: string): Mesa & { status: SharedMesaStatus
     copied,
     handleShare: () => void handleShare(),
     sharing: null,
+    // A new, empty mesa with its own link; this one stays as it is for the group.
+    newMesa: { start: () => void freshMesa.create("", []), busy: freshMesa.busy, error: freshMesa.error },
   };
 };

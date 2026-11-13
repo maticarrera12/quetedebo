@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { useCalculate } from "./useCalculate";
 import { useAddFriendForm } from "./useAddFriendForm";
+import { useCreateSharedMesa } from "./useCreateSharedMesa";
 import type { AddFriendForm } from "./useAddFriendForm";
 import { usePersistedState } from "./usePersistedState";
 
@@ -13,14 +13,19 @@ import { money, parseSettlement } from "../utils/format";
 import type { Settlement } from "../utils/format";
 import { saveToHistory } from "../utils/history";
 import { isBooleanMap, isString } from "../utils/storage";
-import { isSharingConfigured, loadSharedMesaApi } from "../services/supabase";
-import { SharedMesaError } from "../services/sharedMesa";
+import { isSharingConfigured } from "../services/supabase";
 
 export const settlementKey = (settlement: Settlement) =>
   `${settlement.from}>${settlement.to}:${settlement.amount}`;
 
 const signatureOf = (friends: { name: string; expense: number }[]) =>
   friends.map((friend) => `${friend.name}:${friend.expense}`).join("|");
+
+export interface MesaAction {
+  start: () => void;
+  busy: boolean;
+  error: string;
+}
 
 // Everything the table of friends knows and does. The desktop page and the phone shell only
 // differ in how they show it, and a local mesa and a shared one only differ in where it lives.
@@ -48,7 +53,9 @@ export interface Mesa {
   copied: boolean;
   handleShare: () => void;
   // Turning the local mesa into a shared one; null when sharing is not configured or not offered.
-  sharing: { start: () => void; busy: boolean; error: string } | null;
+  sharing: MesaAction | null;
+  // Starting a new, empty shared mesa from a shared one; null on the local mesa.
+  newMesa: MesaAction | null;
 }
 
 // The numbers both kinds of mesa show, derived from who is sitting and what was marked as paid.
@@ -85,7 +92,6 @@ export const useHistorySave = (friends: Friend[], eventName: string) => {
 };
 
 export const useMesa = (): Mesa => {
-  const navigate = useNavigate();
   const { friends, addFriend, updateFriend, deleteFriend, reset } = useCalculate();
 
   const [eventName, setEventName] = usePersistedState<string>("quetedebo:draft:event", "", isString);
@@ -95,8 +101,7 @@ export const useMesa = (): Mesa => {
 
   const [confirmingReset, setConfirmingReset] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
-  const [goingLive, setGoingLive] = useState<boolean>(false);
-  const [liveError, setLiveError] = useState<string>("");
+  const goLive = useCreateSharedMesa();
 
   const form = useAddFriendForm((name, amount, concept, editing) =>
     editing === null ? addFriend(name, amount, concept) : updateFriend(editing, name, amount, concept)
@@ -143,29 +148,6 @@ export const useMesa = (): Mesa => {
     }
   };
 
-  // Uploads this mesa (name and everyone sitting) as a shared one and opens it. The local mesa
-  // stays as it was.
-  const startSharing = async () => {
-    if (goingLive) return;
-
-    setGoingLive(true);
-    setLiveError("");
-
-    try {
-      const api = await loadSharedMesaApi();
-      if (!api) throw new SharedMesaError("Las mesas compartidas no están disponibles.");
-
-      const id = await api.create(eventName.trim(), friends);
-      navigate(`/m/${id}`);
-    } catch (error) {
-      setLiveError(
-        error instanceof SharedMesaError ? error.message : "No pudimos crear la mesa. Revisá tu conexión."
-      );
-    } finally {
-      setGoingLive(false);
-    }
-  };
-
   return {
     kind: "local",
     friends,
@@ -184,8 +166,10 @@ export const useMesa = (): Mesa => {
     handleSave,
     copied,
     handleShare,
+    // Uploads this mesa (name and everyone sitting) as a shared one; the local mesa stays as it was.
     sharing: isSharingConfigured()
-      ? { start: () => void startSharing(), busy: goingLive, error: liveError }
+      ? { start: () => void goLive.create(eventName.trim(), friends), busy: goLive.busy, error: goLive.error }
       : null,
+    newMesa: null,
   };
 };

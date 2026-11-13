@@ -53,6 +53,7 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
     copied,
     handleShare,
     sharing,
+    newMesa,
   } = mesa;
 
   const shared = kind === "shared";
@@ -345,7 +346,24 @@ const MobileMesa = ({ mesa }: { mesa: Mesa }) => {
             </ul>
 
             <div className="mt-1 flex min-h-11 items-center justify-center">
-              {shared ? null : confirmingReset ? (
+              {newMesa ? (
+                <span className="flex flex-col items-center">
+                  <button
+                    type="button"
+                    onClick={newMesa.start}
+                    disabled={newMesa.busy}
+                    className="min-h-11 px-3 text-sm font-semibold text-muted"
+                  >
+                    {newMesa.busy ? "Armando la mesa…" : "Nueva mesa"}
+                  </button>
+
+                  {newMesa.error && (
+                    <span role="alert" className="text-center text-sm font-semibold text-danger">
+                      {newMesa.error}
+                    </span>
+                  )}
+                </span>
+              ) : shared ? null : confirmingReset ? (
                 <span className="flex items-center gap-4 text-sm font-semibold">
                   ¿Levantar a {count}?
                   <button type="button" onClick={handleReset} className="min-h-11 px-2 text-danger">
